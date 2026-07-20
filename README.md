@@ -1,43 +1,56 @@
-# Astro Starter Kit: Minimal
+# credentics.io
 
-```sh
-npm create astro@latest -- --template minimal
+Source for the Credentics marketing site — homepage, workshops, blog, and changelog. Built with [Astro](https://astro.build) + Tailwind.
+
+Docs (`credentics.io/docs`) live in a separate repo: [`credentics/docs`](https://github.com/credentics/docs).
+
+## Local development
+
+```
+npm install
+npm run dev
 ```
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+Serves at `http://localhost:4321`.
 
-## 🚀 Project Structure
+## Build
 
-Inside of your Astro project, you'll see the following folders and files:
-
-```text
-/
-├── public/
-├── src/
-│   └── pages/
-│       └── index.astro
-└── package.json
+```
+npm run build
 ```
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
+Outputs static HTML to `dist/`.
 
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
+## Deploying
 
-Any static assets, like images, can be placed in the `public/` directory.
+Deployed independently from the docs repo, but served from the same domain and the same Contabo box — Nginx routes `/docs` to the docs repo's build output and everything else to this repo's, via two `location` blocks in one server block (see the docs repo's README for the full Nginx config).
 
-## 🧞 Commands
+## CI/CD
 
-All commands are run from the root of the project, from a terminal:
+Two GitHub Actions workflows:
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
+- **`ci.yml`** — runs `npm run build` on every PR and every push to a non-`main` branch. Pure build check, no deploy.
+- **`deploy.yml`** — on push to `main`, builds and `rsync`s `dist/` straight to the Contabo box.
 
-## 👀 Want to learn more?
+`deploy.yml` needs these set in the repo's GitHub settings (Settings → Secrets and variables → Actions):
 
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+| Name | Type | Value |
+|---|---|---|
+| `DEPLOY_HOST` | Secret | Contabo server hostname/IP |
+| `DEPLOY_USER` | Secret | `deploy` |
+| `DEPLOY_SSH_KEY` | Secret | Private key for the `deploy` user (see below) |
+| `DEPLOY_PATH` | Variable | `/var/www/credentics/dist` |
+
+The `deploy` user is shared with the docs repo's deploy, but uses a **separate keypair per repo** so a leaked secret in one repo doesn't compromise the other. Retrieve this repo's key directly from the server rather than having it pass through any chat/AI tool:
+
+```
+ssh root@<server> cat /root/deploy_key_website
+```
+
+Paste that into the `DEPLOY_SSH_KEY` secret, then delete it from the server:
+
+```
+ssh root@<server> rm /root/deploy_key_website /root/deploy_key_website.pub
+```
+
+The workflow also targets a GitHub **environment** named `production` — optional protection (e.g. required reviewers before a deploy runs). Create one under Settings → Environments if you want that gate, or remove the `environment: production` line from `deploy.yml` if every push to `main` should deploy immediately.

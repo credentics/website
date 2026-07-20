@@ -10,7 +10,11 @@ Manage the background server with `astro dev stop`, `astro dev status`, and `ast
 
 ## Docs site
 
-`credentics.io/docs` is served from a separate repo (`credentics-docs`, MkDocs + Material theme), deployed independently and routed onto `/docs` at the Nginx level on the same server. Nothing in this repo builds or references it — see that repo's README for build/deploy details.
+`credentics.io/docs` is served from a separate repo ([`credentics/docs`](https://github.com/credentics/docs), MkDocs + Material theme), deployed independently and routed onto `/docs` at the Nginx level on the same server. Nothing in this repo builds or references it — see that repo's README for build/deploy details.
+
+## Deploy
+
+Push to `main` triggers `.github/workflows/deploy.yml`, which builds and rsyncs to the Contabo server. See `README.md` for the required GitHub secrets/variables.
 
 ## Documentation
 
