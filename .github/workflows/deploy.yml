@@ -5,6 +5,13 @@ on:
     branches: [main]
   workflow_dispatch:
 
+permissions:
+  contents: read
+
+concurrency:
+  group: credentics-production
+  cancel-in-progress: false
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -21,12 +28,145 @@ jobs:
 
       - run: npm run build
 
-      - name: Deploy to Contabo
-        uses: burnett01/rsync-deployments@7.0.2
-        with:
-          switches: -avzr --delete
-          path: dist/
-          remote_path: ${{ secrets.DEPLOY_PATH }}
-          remote_host: ${{ secrets.DEPLOY_HOST }}
-          remote_user: ${{ secrets.DEPLOY_USER }}
-          remote_key: ${{ secrets.DEPLOY_SSH_KEY }}
+      - name: Prepare release bundle
+        run: |
+          set -euo pipefail
+          mkdir -p .release
+          cp -R dist .release/dist
+          cp package.json package-lock.json .release/
+
+      - name: Resolve deployment root
+        env:
+          DEPLOY_PATH: ${{ secrets.DEPLOY_PATH }}
+        run: |
+          set -euo pipefail
+          if [[ "$(basename "$DEPLOY_PATH")" == "dist" ]]; then
+            deploy_root="$(dirname "$DEPLOY_PATH")"
+          else
+            deploy_root="$DEPLOY_PATH"
+          fi
+          if [[ "$deploy_root" != "/var/www/credentics" ]]; then
+            echo "Unexpected deployment root: $deploy_root" >&2
+            exit 1
+          fi
+          printf 'DEPLOY_ROOT=%s\n' "$deploy_root" >> "$GITHUB_ENV"
+
+      - name: Configure SSH
+        env:
+          DEPLOY_SSH_KEY: ${{ secrets.DEPLOY_SSH_KEY }}
+        run: |
+          set -euo pipefail
+          install -d -m 700 "$HOME/.ssh"
+          printf '%s\n' "$DEPLOY_SSH_KEY" > "$RUNNER_TEMP/deploy_key"
+          chmod 600 "$RUNNER_TEMP/deploy_key"
+
+      - name: Upload release
+        env:
+          DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
+          DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
+        run: |
+          set -euo pipefail
+          remote="$DEPLOY_USER@$DEPLOY_HOST"
+          release="$DEPLOY_ROOT/releases/$GITHUB_SHA"
+          ssh_options=(
+            -i "$RUNNER_TEMP/deploy_key"
+            -o BatchMode=yes
+            -o IdentitiesOnly=yes
+            -o UserKnownHostsFile="$GITHUB_WORKSPACE/ops/known_hosts"
+            -o HostKeyAlias=credentics-production
+          )
+
+          ssh "${ssh_options[@]}" "$remote" mkdir -p -- "$release"
+          rsync -az --delete \
+            -e "ssh -i $RUNNER_TEMP/deploy_key -o BatchMode=yes -o IdentitiesOnly=yes -o UserKnownHostsFile=$GITHUB_WORKSPACE/ops/known_hosts -o HostKeyAlias=credentics-production" \
+            .release/ "$remote:$release/"
+
+      - name: Install runtime environment
+        env:
+          CONTACT_WEBHOOK_URL: ${{ secrets.CONTACT_WEBHOOK_URL }}
+          DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
+          DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
+        run: |
+          set -euo pipefail
+          test -n "$CONTACT_WEBHOOK_URL"
+          remote="$DEPLOY_USER@$DEPLOY_HOST"
+          env_file="$RUNNER_TEMP/credentics-website.env"
+          trap 'rm -f "$env_file"' EXIT
+          umask 077
+          printf 'CONTACT_WEBHOOK_URL=%s\n' "$CONTACT_WEBHOOK_URL" > "$env_file"
+          ssh_options=(
+            -i "$RUNNER_TEMP/deploy_key"
+            -o BatchMode=yes
+            -o IdentitiesOnly=yes
+            -o UserKnownHostsFile="$GITHUB_WORKSPACE/ops/known_hosts"
+            -o HostKeyAlias=credentics-production
+          )
+
+          ssh "${ssh_options[@]}" "$remote" mkdir -p -- "$DEPLOY_ROOT/shared"
+          scp "${ssh_options[@]}" "$env_file" "$remote:$DEPLOY_ROOT/shared/website.env.next"
+          ssh "${ssh_options[@]}" "$remote" \
+            chmod 600 "$DEPLOY_ROOT/shared/website.env.next"
+          ssh "${ssh_options[@]}" "$remote" \
+            mv "$DEPLOY_ROOT/shared/website.env.next" "$DEPLOY_ROOT/shared/website.env"
+
+      - name: Activate release
+        env:
+          DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
+          DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
+        run: |
+          set -euo pipefail
+          remote="$DEPLOY_USER@$DEPLOY_HOST"
+          ssh_options=(
+            -i "$RUNNER_TEMP/deploy_key"
+            -o BatchMode=yes
+            -o IdentitiesOnly=yes
+            -o UserKnownHostsFile="$GITHUB_WORKSPACE/ops/known_hosts"
+            -o HostKeyAlias=credentics-production
+          )
+
+          ssh "${ssh_options[@]}" "$remote" bash -s -- "$DEPLOY_ROOT" "$GITHUB_SHA" <<'REMOTE'
+          set -euo pipefail
+          export PATH="/usr/local/bin:/usr/bin:/bin"
+
+          deploy_root="$1"
+          release="$deploy_root/releases/$2"
+          current="$deploy_root/current"
+          previous="$(readlink "$current" 2>/dev/null || true)"
+
+          cd "$release"
+          npm ci --omit=dev --no-audit --no-fund
+
+          activate() {
+            ln -sfn "$1" "$deploy_root/current.next"
+            mv -Tf "$deploy_root/current.next" "$current"
+          }
+
+          rollback() {
+            if [[ -n "$previous" ]]; then
+              activate "$previous"
+              sudo /usr/bin/systemctl restart credentics-website.service || true
+            fi
+          }
+
+          activate "$release"
+          if ! sudo /usr/bin/systemctl restart credentics-website.service; then
+            rollback
+            exit 1
+          fi
+
+          healthy=0
+          for _ in {1..20}; do
+            if curl --fail --silent --show-error http://127.0.0.1:4321/ >/dev/null; then
+              healthy=1
+              break
+            fi
+            sleep 1
+          done
+
+          if [[ "$healthy" -ne 1 ]]; then
+            rollback
+            exit 1
+          fi
+
+          sudo /usr/bin/systemctl is-active credentics-website.service
+          REMOTE

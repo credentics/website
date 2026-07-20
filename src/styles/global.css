@@ -58,6 +58,22 @@ body {
   color: var(--color-bg);
 }
 
+.connect-dialog::backdrop {
+  background: color-mix(in srgb, #080711 72%, transparent);
+  backdrop-filter: blur(8px);
+}
+
+.connect-dialog[open] {
+  animation: connect-in 180ms ease-out;
+}
+
+@keyframes connect-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.98);
+  }
+}
+
 .blob {
   position: absolute;
   border-radius: 9999px;
@@ -122,6 +138,7 @@ svg[data-draw].is-visible .draw-path {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .connect-dialog[open],
   .orbit-ring,
   .graphic-node {
     animation: none !important;
