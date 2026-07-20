@@ -96,30 +96,9 @@ body {
 }
 
 /* Illustration motion */
-@keyframes spin-cw {
-  to { transform: rotate(360deg); }
-}
-@keyframes spin-ccw {
-  to { transform: rotate(-360deg); }
-}
 @keyframes node-pulse {
   0%, 100% { transform: scale(1); opacity: 1; }
   50% { transform: scale(1.35); opacity: 0.6; }
-}
-
-.orbit-ring {
-  transform-box: fill-box;
-  transform-origin: center;
-  animation: spin-cw 50s linear infinite;
-}
-.orbit-ring--reverse {
-  animation-name: spin-ccw;
-}
-.orbit-ring--slow {
-  animation-duration: 70s;
-}
-.orbit-ring--fast {
-  animation-duration: 34s;
 }
 
 .graphic-node {
@@ -139,7 +118,6 @@ svg[data-draw].is-visible .draw-path {
 
 @media (prefers-reduced-motion: reduce) {
   .connect-dialog[open],
-  .orbit-ring,
   .graphic-node {
     animation: none !important;
   }

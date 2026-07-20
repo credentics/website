@@ -2,42 +2,477 @@
 interface Props {
   class?: string;
 }
+
 const { class: className = '' } = Astro.props;
 ---
 
-<svg
-  viewBox="0 0 960 320"
-  fill="none"
-  xmlns="http://www.w3.org/2000/svg"
-  class={className}
-  aria-hidden="true"
-  data-draw
->
-  <defs>
-    <linearGradient id="og-ring" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="var(--color-accent)" />
-      <stop offset="100%" stop-color="var(--color-pink)" />
-    </linearGradient>
-    <linearGradient id="og-key" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="var(--color-blue)" />
-      <stop offset="100%" stop-color="var(--color-accent)" />
-    </linearGradient>
-  </defs>
+<div id="trust-router" class={`trust-visual ${className}`} data-trust-visual>
+  <svg
+    viewBox="0 0 960 380"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    aria-hidden="true"
+    data-draw
+  >
+    <defs>
+      <linearGradient id="trust-route-a" x1="90" y1="70" x2="870" y2="300" gradientUnits="userSpaceOnUse">
+        <stop stop-color="var(--color-blue)" />
+        <stop offset="0.5" stop-color="var(--color-accent)" />
+        <stop offset="1" stop-color="var(--color-pink)" />
+      </linearGradient>
+      <linearGradient id="trust-route-b" x1="170" y1="300" x2="810" y2="60" gradientUnits="userSpaceOnUse">
+        <stop stop-color="var(--color-teal)" />
+        <stop offset="0.52" stop-color="var(--color-blue)" />
+        <stop offset="1" stop-color="var(--color-accent)" />
+      </linearGradient>
+      <linearGradient id="trust-core-edge" x1="-45" y1="-52" x2="50" y2="54" gradientUnits="userSpaceOnUse">
+        <stop stop-color="var(--color-teal)" />
+        <stop offset="0.48" stop-color="var(--color-blue)" />
+        <stop offset="1" stop-color="var(--color-pink)" />
+      </linearGradient>
+      <radialGradient id="trust-core-fill" cx="0" cy="0" r="1" gradientTransform="rotate(90 0 0) scale(72)">
+        <stop stop-color="var(--color-surface)" stop-opacity="0.98" />
+        <stop offset="0.7" stop-color="var(--color-surface-2)" stop-opacity="0.94" />
+        <stop offset="1" stop-color="var(--color-accent)" stop-opacity="0.12" />
+      </radialGradient>
+      <radialGradient id="trust-ambient" cx="0" cy="0" r="1" gradientTransform="translate(480 190) rotate(90) scale(165)">
+        <stop stop-color="var(--color-accent)" stop-opacity="0.18" />
+        <stop offset="0.5" stop-color="var(--color-blue)" stop-opacity="0.06" />
+        <stop offset="1" stop-color="var(--color-accent)" stop-opacity="0" />
+      </radialGradient>
+      <filter id="trust-glow" x="-100%" y="-100%" width="300%" height="300%" color-interpolation-filters="sRGB">
+        <feGaussianBlur stdDeviation="5" result="blur" />
+        <feMerge>
+          <feMergeNode in="blur" />
+          <feMergeNode in="SourceGraphic" />
+        </feMerge>
+      </filter>
+      <filter id="trust-core-shadow" x="-80%" y="-80%" width="260%" height="260%" color-interpolation-filters="sRGB">
+        <feDropShadow dx="0" dy="12" stdDeviation="14" flood-color="var(--color-accent)" flood-opacity="0.17" />
+      </filter>
 
-  <ellipse cx="480" cy="160" rx="330" ry="90" stroke="url(#og-ring)" stroke-width="1.5" stroke-opacity="0.35" class="orbit-ring orbit-ring--slow" />
-  <ellipse cx="480" cy="160" rx="230" ry="150" stroke="url(#og-ring)" stroke-width="1.5" stroke-opacity="0.5" class="orbit-ring orbit-ring--reverse" />
-  <ellipse cx="480" cy="160" rx="130" ry="200" stroke="var(--color-teal)" stroke-width="1.5" stroke-opacity="0.35" class="orbit-ring orbit-ring--fast" />
+      <path id="trust-path-a" d="M110 190C238 54 372 69 480 190S721 326 850 190" />
+      <path id="trust-path-b" d="M178 76C267 255 390 316 480 190S672 42 792 80" />
+      <path id="trust-path-c" d="M150 290C318 252 351 91 480 190S659 285 820 280" />
+    </defs>
 
-  <g transform="translate(480 160)">
-    <circle r="34" fill="url(#og-key)" fill-opacity="0.12" />
-    <circle cx="-6" cy="-2" r="11" stroke="url(#og-key)" stroke-width="3" class="draw-path" />
-    <path d="M2 6l20 20M14 18l7-7M20 24l6-6" stroke="url(#og-key)" stroke-width="3" stroke-linecap="round" class="draw-path" style="transition-delay: 0.3s" />
-  </g>
+    <g class="trust-field">
+      <ellipse cx="480" cy="190" rx="278" ry="137" fill="url(#trust-ambient)" />
 
-  <circle cx="150" cy="150" r="6" fill="var(--color-yellow)" class="graphic-node" style="animation-delay: 0s" />
-  <circle cx="810" cy="140" r="6" fill="var(--color-pink)" class="graphic-node" style="animation-delay: 0.4s" />
-  <circle cx="230" cy="250" r="5" fill="var(--color-accent)" class="graphic-node" style="animation-delay: 0.8s" />
-  <circle cx="720" cy="250" r="5" fill="var(--color-teal)" class="graphic-node" style="animation-delay: 1.2s" />
-  <circle cx="700" cy="60" r="5" fill="var(--color-blue)" class="graphic-node" style="animation-delay: 1.6s" />
-  <circle cx="260" cy="60" r="4" fill="var(--color-accent)" class="graphic-node" style="animation-delay: 2s" />
-</svg>
+      <g class="trust-stars">
+        <circle cx="93" cy="102" r="2" fill="var(--color-accent)" class="trust-star" style="--delay: -0.4s" />
+        <circle cx="276" cy="31" r="2.5" fill="var(--color-pink)" class="trust-star" style="--delay: -1.8s" />
+        <circle cx="675" cy="30" r="2" fill="var(--color-teal)" class="trust-star" style="--delay: -2.6s" />
+        <circle cx="896" cy="115" r="2.5" fill="var(--color-blue)" class="trust-star" style="--delay: -1.1s" />
+        <circle cx="87" cy="307" r="2" fill="var(--color-yellow)" class="trust-star" style="--delay: -3.2s" />
+        <circle cx="700" cy="347" r="2" fill="var(--color-accent)" class="trust-star" style="--delay: -0.9s" />
+        <circle cx="900" cy="316" r="2" fill="var(--color-pink)" class="trust-star" style="--delay: -2.1s" />
+      </g>
+
+      <g class="trust-routes">
+        <use href="#trust-path-a" stroke="var(--color-border)" stroke-width="1.25" stroke-opacity="0.9" />
+        <use href="#trust-path-b" stroke="var(--color-border)" stroke-width="1.25" stroke-opacity="0.9" />
+        <use href="#trust-path-c" stroke="var(--color-border)" stroke-width="1.25" stroke-opacity="0.9" />
+
+        <use href="#trust-path-a" stroke="url(#trust-route-a)" class="trust-route trust-route--a" />
+        <use href="#trust-path-b" stroke="url(#trust-route-b)" class="trust-route trust-route--b" />
+        <use href="#trust-path-c" stroke="url(#trust-route-a)" class="trust-route trust-route--c" />
+      </g>
+
+      <g class="trust-packet trust-packet--a" filter="url(#trust-glow)">
+        <circle r="11" fill="var(--color-accent)" fill-opacity="0.12" class="trust-packet__halo" />
+        <rect x="-4.5" y="-4.5" width="9" height="9" rx="2.5" transform="rotate(45)" fill="var(--color-accent)" />
+        <circle r="1.5" fill="white" />
+        <animateMotion dur="8.4s" begin="-5.8s" repeatCount="indefinite" rotate="auto">
+          <mpath href="#trust-path-a" />
+        </animateMotion>
+      </g>
+      <g class="trust-packet trust-packet--b" filter="url(#trust-glow)">
+        <circle r="11" fill="var(--color-teal)" fill-opacity="0.12" class="trust-packet__halo" />
+        <rect x="-4.5" y="-4.5" width="9" height="9" rx="2.5" transform="rotate(45)" fill="var(--color-teal)" />
+        <circle r="1.5" fill="white" />
+        <animateMotion dur="10.8s" begin="-2.7s" repeatCount="indefinite" rotate="auto">
+          <mpath href="#trust-path-b" />
+        </animateMotion>
+      </g>
+      <g class="trust-packet trust-packet--c" filter="url(#trust-glow)">
+        <circle r="11" fill="var(--color-pink)" fill-opacity="0.12" class="trust-packet__halo" />
+        <rect x="-4.5" y="-4.5" width="9" height="9" rx="2.5" transform="rotate(45)" fill="var(--color-pink)" />
+        <circle r="1.5" fill="white" />
+        <animateMotion dur="12.6s" begin="-8.1s" repeatCount="indefinite" rotate="auto">
+          <mpath href="#trust-path-c" />
+        </animateMotion>
+      </g>
+
+      <g transform="translate(110 190)" class="trust-endpoint" style="--delay: -0.4s">
+        <circle r="25" class="trust-endpoint__pulse" />
+        <rect x="-45" y="-16" width="90" height="32" rx="16" class="trust-endpoint__body" />
+        <circle cx="-28" r="4" fill="var(--color-yellow)" />
+        <text x="-17" y="3.5" class="trust-endpoint__label">HUMAN</text>
+      </g>
+      <g transform="translate(850 190)" class="trust-endpoint" style="--delay: -1.7s">
+        <circle r="25" class="trust-endpoint__pulse" />
+        <rect x="-48" y="-16" width="96" height="32" rx="16" class="trust-endpoint__body" />
+        <circle cx="-31" r="4" fill="var(--color-pink)" />
+        <text x="-20" y="3.5" class="trust-endpoint__label">SERVICE</text>
+      </g>
+      <g transform="translate(178 76)" class="trust-endpoint" style="--delay: -2.2s">
+        <circle r="22" class="trust-endpoint__pulse" />
+        <rect x="-35" y="-15" width="70" height="30" rx="15" class="trust-endpoint__body" />
+        <circle cx="-20" r="3.5" fill="var(--color-blue)" />
+        <text x="-10" y="3.5" class="trust-endpoint__label">CLI</text>
+      </g>
+      <g transform="translate(792 80)" class="trust-endpoint" style="--delay: -0.9s">
+        <circle r="22" class="trust-endpoint__pulse" />
+        <rect x="-40" y="-15" width="80" height="30" rx="15" class="trust-endpoint__body" />
+        <circle cx="-24" r="3.5" fill="var(--color-accent)" />
+        <text x="-14" y="3.5" class="trust-endpoint__label">CLOUD</text>
+      </g>
+      <g transform="translate(150 290)" class="trust-endpoint" style="--delay: -2.8s">
+        <circle r="22" class="trust-endpoint__pulse" />
+        <rect x="-52" y="-15" width="104" height="30" rx="15" class="trust-endpoint__body" />
+        <circle cx="-35" r="3.5" fill="var(--color-teal)" />
+        <text x="-25" y="3.5" class="trust-endpoint__label">WORKLOAD</text>
+      </g>
+      <g transform="translate(820 280)" class="trust-endpoint" style="--delay: -1.3s">
+        <circle r="22" class="trust-endpoint__pulse" />
+        <rect x="-43" y="-15" width="86" height="30" rx="15" class="trust-endpoint__body" />
+        <circle cx="-27" r="3.5" fill="var(--color-yellow)" />
+        <text x="-17" y="3.5" class="trust-endpoint__label">POLICY</text>
+      </g>
+    </g>
+
+    <g transform="translate(480 190)">
+      <g class="trust-core">
+        <circle r="110" stroke="var(--color-accent)" stroke-opacity="0.08" class="trust-core__pulse" />
+
+        <g class="trust-core__ring trust-core__ring--outer">
+          <circle r="91" stroke="var(--color-border)" stroke-width="1.2" stroke-dasharray="2 8" />
+          <path d="M0-91A91 91 0 0 1 78-47" stroke="url(#trust-core-edge)" stroke-width="3" stroke-linecap="round" />
+          <path d="M0 91A91 91 0 0 1-78 47" stroke="url(#trust-core-edge)" stroke-width="3" stroke-linecap="round" />
+          <circle cy="-91" r="4" fill="var(--color-teal)" filter="url(#trust-glow)" />
+        </g>
+
+        <g class="trust-core__ring trust-core__ring--inner">
+          <circle r="73" stroke="var(--color-accent)" stroke-opacity="0.2" stroke-width="1" />
+          <path d="M-52-51A73 73 0 0 1 69-24" stroke="var(--color-pink)" stroke-opacity="0.7" stroke-width="2.5" stroke-linecap="round" />
+          <circle cx="69" cy="-24" r="3.5" fill="var(--color-pink)" filter="url(#trust-glow)" />
+        </g>
+
+        <g class="trust-core__scanner">
+          <path d="M0 0L0-68A68 68 0 0 1 48-48Z" fill="url(#trust-core-edge)" fill-opacity="0.08" />
+          <path d="M0 0V-68" stroke="var(--color-teal)" stroke-width="1.25" stroke-opacity="0.55" />
+        </g>
+
+        <g filter="url(#trust-core-shadow)">
+          <path d="M0-57L49-28.5V28.5L0 57-49 28.5V-28.5Z" fill="url(#trust-core-fill)" stroke="url(#trust-core-edge)" stroke-width="1.5" />
+          <path d="M0-47L40.5-23.5V23.5L0 47-40.5 23.5V-23.5Z" stroke="var(--color-border)" stroke-width="1" stroke-dasharray="3 5" />
+        </g>
+
+        <circle r="31" fill="var(--color-accent)" fill-opacity="0.08" stroke="var(--color-accent)" stroke-opacity="0.16" />
+        <circle r="27" stroke="url(#trust-core-edge)" stroke-width="1.2" stroke-dasharray="5 7" class="trust-core__key-orbit" />
+        <g class="trust-core__key">
+          <circle cx="-10" cy="0" r="8.5" stroke="url(#trust-core-edge)" stroke-width="3" />
+          <circle cx="-10" cy="0" r="2.5" fill="var(--color-blue)" />
+          <path d="M-1.5 0H20M10 0V7M17 0V5" stroke="url(#trust-core-edge)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+        </g>
+        <g transform="translate(20 -19)" class="trust-core__spark">
+          <circle r="5.5" fill="var(--color-surface)" stroke="var(--color-teal)" stroke-width="1" />
+          <path d="M0-2.7V2.7M-2.7 0H2.7" stroke="var(--color-teal)" stroke-width="1.4" stroke-linecap="round" />
+        </g>
+        <text x="0" y="77" text-anchor="middle" class="trust-core__label">EPHEMERAL TRUST</text>
+      </g>
+    </g>
+  </svg>
+</div>
+
+<script>
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+  document.querySelectorAll<HTMLElement>('[data-trust-visual]').forEach((visual) => {
+    const svg = visual.querySelector('svg');
+    if (!svg) return;
+
+    const syncMotion = () => {
+      if (reducedMotion.matches) svg.pauseAnimations();
+      else svg.unpauseAnimations();
+    };
+
+    const resetPosition = () => {
+      visual.style.setProperty('--trust-shift-x', '0px');
+      visual.style.setProperty('--trust-shift-y', '0px');
+      visual.style.setProperty('--trust-core-x', '0px');
+      visual.style.setProperty('--trust-core-y', '0px');
+      visual.style.setProperty('--trust-tilt-x', '0deg');
+      visual.style.setProperty('--trust-tilt-y', '0deg');
+    };
+
+    visual.addEventListener('pointermove', (event) => {
+      if (reducedMotion.matches) return;
+      const bounds = visual.getBoundingClientRect();
+      const x = (event.clientX - bounds.left) / bounds.width - 0.5;
+      const y = (event.clientY - bounds.top) / bounds.height - 0.5;
+
+      visual.style.setProperty('--trust-shift-x', `${x * -7}px`);
+      visual.style.setProperty('--trust-shift-y', `${y * -5}px`);
+      visual.style.setProperty('--trust-core-x', `${x * 12}px`);
+      visual.style.setProperty('--trust-core-y', `${y * 8}px`);
+      visual.style.setProperty('--trust-tilt-x', `${y * -3}deg`);
+      visual.style.setProperty('--trust-tilt-y', `${x * 4}deg`);
+    });
+
+    visual.addEventListener('pointerleave', resetPosition);
+    reducedMotion.addEventListener('change', () => {
+      resetPosition();
+      syncMotion();
+    });
+    syncMotion();
+  });
+</script>
+
+<style>
+  .trust-visual {
+    --trust-shift-x: 0px;
+    --trust-shift-y: 0px;
+    --trust-core-x: 0px;
+    --trust-core-y: 0px;
+    --trust-tilt-x: 0deg;
+    --trust-tilt-y: 0deg;
+    position: relative;
+    isolation: isolate;
+    perspective: 900px;
+    scroll-margin-top: 8rem;
+  }
+
+  .trust-visual::before {
+    position: absolute;
+    z-index: -1;
+    inset: 18% 23%;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--color-accent) 12%, transparent);
+    filter: blur(42px);
+    content: '';
+    opacity: 0.8;
+    transition: opacity 500ms ease, transform 700ms cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+
+  .trust-visual:hover::before {
+    opacity: 1;
+    transform: scale(1.12);
+  }
+
+  svg {
+    display: block;
+    width: 100%;
+    height: auto;
+    overflow: visible;
+    transform: rotateX(var(--trust-tilt-x)) rotateY(var(--trust-tilt-y));
+    transform-origin: center;
+    transition: transform 300ms cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+
+  .trust-field {
+    transform: translate(var(--trust-shift-x), var(--trust-shift-y));
+    transition: transform 350ms cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+
+  .trust-core {
+    transform: translate(var(--trust-core-x), var(--trust-core-y));
+    transform-box: fill-box;
+    transform-origin: center;
+    transition: transform 350ms cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+
+  .trust-route {
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-dasharray: 3 18 44 16;
+    animation: trust-route-flow 6s linear infinite;
+    opacity: 0.75;
+  }
+
+  .trust-route--b {
+    animation-direction: reverse;
+    animation-duration: 7.5s;
+  }
+
+  .trust-route--c {
+    animation-duration: 9s;
+    opacity: 0.58;
+  }
+
+  .trust-visual:hover .trust-route {
+    animation-duration: 2.8s;
+    opacity: 0.95;
+  }
+
+  .trust-star {
+    animation: trust-twinkle 3.8s ease-in-out var(--delay) infinite;
+  }
+
+  .trust-packet__halo {
+    animation: trust-packet-pulse 1.4s ease-in-out infinite;
+  }
+
+  .trust-endpoint__body {
+    fill: var(--color-surface);
+    stroke: var(--color-border);
+    stroke-width: 1.2;
+    transition: stroke 250ms ease, filter 250ms ease;
+  }
+
+  .trust-endpoint__pulse {
+    fill: none;
+    stroke: var(--color-accent);
+    stroke-width: 1;
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: trust-endpoint-pulse 3.6s ease-out var(--delay) infinite;
+  }
+
+  .trust-endpoint__label,
+  .trust-core__label {
+    fill: var(--color-muted);
+    font-family: var(--font-mono);
+    font-size: 9px;
+    letter-spacing: 0.12em;
+  }
+
+  .trust-core__label {
+    font-size: 8px;
+    letter-spacing: 0.19em;
+  }
+
+  .trust-core__ring,
+  .trust-core__scanner,
+  .trust-core__key,
+  .trust-core__key-orbit,
+  .trust-core__spark,
+  .trust-core__pulse {
+    transform-box: fill-box;
+    transform-origin: center;
+  }
+
+  .trust-core__ring--outer {
+    animation: trust-spin 17s linear infinite;
+  }
+
+  .trust-core__ring--inner {
+    animation: trust-spin-reverse 11s linear infinite;
+  }
+
+  .trust-core__scanner {
+    animation: trust-spin 5.5s linear infinite;
+  }
+
+  .trust-core__pulse {
+    animation: trust-core-pulse 3.2s ease-out infinite;
+  }
+
+  .trust-core__key-orbit {
+    animation: trust-spin-reverse 8s linear infinite;
+  }
+
+  .trust-core__key {
+    animation: trust-key-float 3.2s ease-in-out infinite;
+  }
+
+  .trust-core__spark {
+    animation: trust-spark 2s ease-in-out infinite;
+    filter: drop-shadow(0 0 5px var(--color-teal));
+  }
+
+  .trust-visual:hover .trust-core__key {
+    animation: trust-key-turn 1.25s cubic-bezier(0.2, 0.9, 0.2, 1) both;
+  }
+
+  .trust-visual:hover .trust-core__ring--outer {
+    animation-duration: 8s;
+  }
+
+  .trust-visual:hover .trust-core__ring--inner {
+    animation-duration: 5.5s;
+  }
+
+  @keyframes trust-route-flow {
+    to { stroke-dashoffset: -162; }
+  }
+
+  @keyframes trust-spin {
+    to { transform: rotate(360deg); }
+  }
+
+  @keyframes trust-spin-reverse {
+    to { transform: rotate(-360deg); }
+  }
+
+  @keyframes trust-twinkle {
+    0%, 100% { opacity: 0.25; transform: scale(0.7); }
+    50% { opacity: 1; transform: scale(1.35); }
+  }
+
+  @keyframes trust-packet-pulse {
+    0%, 100% { transform: scale(0.75); opacity: 0.2; }
+    50% { transform: scale(1.35); opacity: 0.55; }
+  }
+
+  @keyframes trust-endpoint-pulse {
+    0% { transform: scale(0.55); opacity: 0; }
+    18% { opacity: 0.28; }
+    70%, 100% { transform: scale(1.8); opacity: 0; }
+  }
+
+  @keyframes trust-core-pulse {
+    0% { transform: scale(0.7); opacity: 0; }
+    24% { opacity: 0.2; }
+    80%, 100% { transform: scale(1.35); opacity: 0; }
+  }
+
+  @keyframes trust-key-float {
+    0%, 100% { transform: translateY(1px); }
+    50% { transform: translateY(-1.5px); }
+  }
+
+  @keyframes trust-spark {
+    0%, 100% { opacity: 0.62; transform: rotate(0deg) scale(0.82); }
+    50% { opacity: 1; transform: rotate(90deg) scale(1.12); }
+  }
+
+  @keyframes trust-key-turn {
+    0% { transform: rotate(0deg) scale(1); }
+    38% { transform: rotate(-10deg) scale(0.9); }
+    72% { transform: rotate(96deg) scale(1.08); }
+    100% { transform: rotate(90deg) scale(1); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    svg,
+    .trust-field,
+    .trust-core {
+      transform: none !important;
+      transition: none !important;
+    }
+
+    .trust-route,
+    .trust-star,
+    .trust-packet__halo,
+    .trust-endpoint__pulse,
+    .trust-core__ring,
+    .trust-core__scanner,
+    .trust-core__pulse,
+    .trust-core__key-orbit,
+    .trust-core__spark,
+    .trust-core__key {
+      animation: none !important;
+    }
+
+    .trust-route {
+      stroke-dashoffset: 0;
+    }
+
+    .trust-endpoint__pulse,
+    .trust-core__pulse {
+      display: none;
+    }
+  }
+</style>
