@@ -1,0 +1,459 @@
+---
+interface Props {
+  class?: string;
+}
+
+const { class: className = '' } = Astro.props;
+---
+
+<div id="security-plane" class={`mesh-visual ${className}`}>
+  <svg
+    viewBox="0 0 960 380"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    aria-hidden="true"
+  >
+    <defs>
+      <pattern id="mesh-grid" width="32" height="32" patternUnits="userSpaceOnUse">
+        <path d="M32 0H0V32" stroke="var(--color-border)" stroke-width="0.7" opacity="0.42" />
+      </pattern>
+
+      <linearGradient id="mesh-route" x1="220" y1="0" x2="740" y2="0" gradientUnits="userSpaceOnUse">
+        <stop stop-color="var(--color-teal)" stop-opacity="0.35" />
+        <stop offset="0.46" stop-color="var(--color-blue)" />
+        <stop offset="0.58" stop-color="var(--color-accent)" />
+        <stop offset="1" stop-color="var(--color-blue)" stop-opacity="0.35" />
+      </linearGradient>
+
+      <linearGradient id="mesh-scan" x1="0" y1="0" x2="1" y2="0">
+        <stop stop-color="var(--color-accent)" stop-opacity="0" />
+        <stop offset="0.5" stop-color="var(--color-accent)" stop-opacity="0.11" />
+        <stop offset="1" stop-color="var(--color-accent)" stop-opacity="0" />
+      </linearGradient>
+
+      <linearGradient id="mesh-core-edge" x1="360" y1="85" x2="600" y2="295" gradientUnits="userSpaceOnUse">
+        <stop stop-color="var(--color-blue)" />
+        <stop offset="0.52" stop-color="var(--color-accent)" />
+        <stop offset="1" stop-color="var(--color-teal)" />
+      </linearGradient>
+
+      <radialGradient id="mesh-core-fill" cx="0" cy="0" r="1" gradientTransform="translate(480 190) rotate(90) scale(150 205)">
+        <stop stop-color="var(--color-accent)" stop-opacity="0.085" />
+        <stop offset="0.62" stop-color="var(--color-blue)" stop-opacity="0.025" />
+        <stop offset="1" stop-color="var(--color-accent)" stop-opacity="0" />
+      </radialGradient>
+
+      <filter id="mesh-core-shadow" x="-30%" y="-30%" width="160%" height="170%" color-interpolation-filters="sRGB">
+        <feDropShadow dx="0" dy="14" stdDeviation="18" flood-color="var(--color-accent)" flood-opacity="0.09" />
+      </filter>
+
+      <filter id="mesh-signal-glow" x="-200%" y="-200%" width="500%" height="500%" color-interpolation-filters="sRGB">
+        <feGaussianBlur stdDeviation="2.2" result="blur" />
+        <feMerge>
+          <feMergeNode in="blur" />
+          <feMergeNode in="SourceGraphic" />
+        </feMerge>
+      </filter>
+
+      <clipPath id="mesh-field-clip">
+        <rect x="32" y="22" width="896" height="336" rx="34" />
+      </clipPath>
+
+      <path id="mesh-lane-top" d="M250 89H310C343 89 342 131 380 131H580C618 131 617 89 650 89H710" />
+      <path id="mesh-lane-mid" d="M250 190H710" />
+      <path id="mesh-lane-bottom" d="M250 291H310C343 291 342 249 380 249H580C618 249 617 291 650 291H710" />
+    </defs>
+
+    <g clip-path="url(#mesh-field-clip)">
+      <rect x="32" y="22" width="896" height="336" rx="34" fill="url(#mesh-grid)" />
+      <ellipse cx="480" cy="190" rx="250" ry="165" fill="url(#mesh-core-fill)" />
+      <rect x="-110" y="22" width="122" height="336" fill="url(#mesh-scan)" class="mesh-scan" />
+    </g>
+
+    <rect x="32.5" y="22.5" width="895" height="335" rx="33.5" stroke="var(--color-border)" stroke-opacity="0.5" />
+
+    <g class="mesh-index" aria-hidden="true">
+      <text x="57" y="50">01 / INPUT</text>
+      <text x="903" y="50" text-anchor="end">02 / OUTPUT</text>
+      <path d="M57 59H122" />
+      <path d="M838 59H903" />
+    </g>
+
+    <g class="mesh-lanes">
+      <use href="#mesh-lane-top" class="mesh-lane-base" />
+      <use href="#mesh-lane-mid" class="mesh-lane-base" />
+      <use href="#mesh-lane-bottom" class="mesh-lane-base" />
+      <use href="#mesh-lane-top" class="mesh-lane mesh-lane--top" />
+      <use href="#mesh-lane-mid" class="mesh-lane mesh-lane--mid" />
+      <use href="#mesh-lane-bottom" class="mesh-lane mesh-lane--bottom" />
+    </g>
+
+    <g class="mesh-signal mesh-signal--top" filter="url(#mesh-signal-glow)">
+      <circle r="3" fill="var(--color-blue)" />
+      <animateMotion dur="7.8s" begin="-2.4s" repeatCount="indefinite">
+        <mpath href="#mesh-lane-top" />
+      </animateMotion>
+    </g>
+    <g class="mesh-signal mesh-signal--mid" filter="url(#mesh-signal-glow)">
+      <circle r="3" fill="var(--color-accent)" />
+      <animateMotion dur="9.6s" begin="-6.1s" repeatCount="indefinite">
+        <mpath href="#mesh-lane-mid" />
+      </animateMotion>
+    </g>
+    <g class="mesh-signal mesh-signal--bottom" filter="url(#mesh-signal-glow)">
+      <circle r="3" fill="var(--color-teal)" />
+      <animateMotion dur="11.4s" begin="-8.7s" repeatCount="indefinite">
+        <mpath href="#mesh-lane-bottom" />
+      </animateMotion>
+    </g>
+
+    <g class="mesh-node mesh-node--left" transform="translate(70 60)" style="--status-delay: 0s">
+      <rect width="180" height="58" rx="15" class="mesh-node__body" />
+      <rect x="14" y="15" width="28" height="28" rx="8" class="mesh-node__icon" />
+      <circle cx="28" cy="29" r="4" fill="var(--color-blue)" />
+      <text x="55" y="27" class="mesh-node__title">HUMAN</text>
+      <text x="55" y="42" class="mesh-node__meta">USER ACCESS</text>
+      <circle cx="166" cy="29" r="2" class="mesh-node__status" />
+    </g>
+
+    <g class="mesh-node mesh-node--left" transform="translate(70 161)" style="--status-delay: -1.2s">
+      <rect width="180" height="58" rx="15" class="mesh-node__body" />
+      <rect x="14" y="15" width="28" height="28" rx="8" class="mesh-node__icon" />
+      <path d="M22 33L28 25L34 33M24.5 30H31.5" class="mesh-node__symbol" />
+      <text x="55" y="27" class="mesh-node__title">WORKLOAD</text>
+      <text x="55" y="42" class="mesh-node__meta">AUTOMATION</text>
+      <circle cx="166" cy="29" r="2" class="mesh-node__status" />
+    </g>
+
+    <g class="mesh-node mesh-node--left" transform="translate(70 262)" style="--status-delay: -2.4s">
+      <rect width="180" height="58" rx="15" class="mesh-node__body" />
+      <rect x="14" y="15" width="28" height="28" rx="8" class="mesh-node__icon" />
+      <path d="M22 25L26 29L22 33M29 33H35" class="mesh-node__symbol" />
+      <text x="55" y="27" class="mesh-node__title">CLI</text>
+      <text x="55" y="42" class="mesh-node__meta">DEVELOPER</text>
+      <circle cx="166" cy="29" r="2" class="mesh-node__status" />
+    </g>
+
+    <g class="mesh-node mesh-node--right" transform="translate(710 60)" style="--status-delay: -2.4s">
+      <rect width="180" height="58" rx="15" class="mesh-node__body" />
+      <rect x="14" y="15" width="28" height="28" rx="8" class="mesh-node__icon" />
+      <path d="M20.5 32C20.5 28.8 23 27.2 25.2 27.2C26.3 24.3 31.5 24.1 33 27.8C36.3 27.8 37.1 34 33 34H24C21.8 34 20.5 33.2 20.5 32Z" class="mesh-node__symbol" />
+      <text x="55" y="27" class="mesh-node__title">CLOUD</text>
+      <text x="55" y="42" class="mesh-node__meta">RUNTIME</text>
+      <circle cx="166" cy="29" r="2" class="mesh-node__status" />
+    </g>
+
+    <g class="mesh-node mesh-node--right" transform="translate(710 161)" style="--status-delay: -1.2s">
+      <rect width="180" height="58" rx="15" class="mesh-node__body" />
+      <rect x="14" y="15" width="28" height="28" rx="8" class="mesh-node__icon" />
+      <path d="M22 25H34V34H22ZM22 29.5H34M28 25V34" class="mesh-node__symbol" />
+      <text x="55" y="27" class="mesh-node__title">KUBERNETES</text>
+      <text x="55" y="42" class="mesh-node__meta">CLUSTER</text>
+      <circle cx="166" cy="29" r="2" class="mesh-node__status" />
+    </g>
+
+    <g class="mesh-node mesh-node--right" transform="translate(710 262)" style="--status-delay: 0s">
+      <rect width="180" height="58" rx="15" class="mesh-node__body" />
+      <rect x="14" y="15" width="28" height="28" rx="8" class="mesh-node__icon" />
+      <circle cx="24" cy="27" r="2" class="mesh-node__symbol-fill" />
+      <circle cx="32" cy="27" r="2" class="mesh-node__symbol-fill" />
+      <circle cx="28" cy="34" r="2" class="mesh-node__symbol-fill" />
+      <path d="M25.5 28.5L27 32M30.5 28.5L29 32" class="mesh-node__symbol" />
+      <text x="55" y="27" class="mesh-node__title">SERVICE</text>
+      <text x="55" y="42" class="mesh-node__meta">APPLICATION</text>
+      <circle cx="166" cy="29" r="2" class="mesh-node__status" />
+    </g>
+
+    <g class="mesh-core" filter="url(#mesh-core-shadow)">
+      <rect x="360" y="85" width="240" height="210" rx="28" class="mesh-core__body" />
+      <path d="M387 85H431M529 85H573M360 112V151M600 112V151M360 229V268M600 229V268M387 295H431M529 295H573" class="mesh-core__edge" />
+
+      <g class="mesh-core__brand">
+        <rect x="444" y="112" width="72" height="72" rx="22" class="mesh-core__brand-tile" />
+        <image href="/brand-icon.png" x="458" y="126" width="44" height="44" />
+      </g>
+
+      <text x="480" y="213" text-anchor="middle" class="mesh-core__title">CREDENTICS</text>
+      <text x="480" y="231" text-anchor="middle" class="mesh-core__subtitle">SECURITY + IDENTITY</text>
+
+      <path d="M389 253H571" class="mesh-core__divider" />
+      <g class="mesh-core__modes">
+        <circle cx="404" cy="272" r="2.5" fill="var(--color-blue)" />
+        <text x="413" y="275">VERIFY</text>
+        <circle cx="469" cy="272" r="2.5" fill="var(--color-accent)" />
+        <text x="478" y="275">CONNECT</text>
+        <circle cx="544" cy="272" r="2.5" fill="var(--color-teal)" />
+        <text x="553" y="275">OBSERVE</text>
+      </g>
+    </g>
+
+    <g class="mesh-corners" aria-hidden="true">
+      <path d="M337 119V73H383" />
+      <path d="M577 73H623V119" />
+      <path d="M623 261V307H577" />
+      <path d="M383 307H337V261" />
+    </g>
+  </svg>
+</div>
+
+<style>
+  .mesh-visual {
+    position: relative;
+    isolation: isolate;
+    scroll-margin-top: 8rem;
+  }
+
+  .mesh-visual::before {
+    position: absolute;
+    z-index: -1;
+    inset: 16% 25%;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--color-accent) 8%, transparent);
+    filter: blur(46px);
+    content: '';
+    opacity: 0.55;
+    transition: opacity 600ms ease, transform 800ms cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+
+  .mesh-visual:hover::before {
+    opacity: 0.75;
+    transform: scale(1.07);
+  }
+
+  svg {
+    display: block;
+    width: 100%;
+    height: auto;
+    overflow: visible;
+  }
+
+  .mesh-index text,
+  .mesh-node__title,
+  .mesh-node__meta,
+  .mesh-core__title,
+  .mesh-core__subtitle,
+  .mesh-core__modes text {
+    font-family: var(--font-mono);
+  }
+
+  .mesh-index text {
+    fill: var(--color-muted);
+    font-size: 8px;
+    letter-spacing: 0.16em;
+  }
+
+  .mesh-index path {
+    stroke: var(--color-border);
+    stroke-width: 1;
+  }
+
+  .mesh-scan {
+    animation: mesh-scan-field 9s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+  }
+
+  .mesh-lane-base {
+    fill: none;
+    stroke: var(--color-border);
+    stroke-width: 1;
+  }
+
+  .mesh-lane {
+    fill: none;
+    stroke: url(#mesh-route);
+    stroke-width: 1.5;
+    stroke-linecap: round;
+    stroke-dasharray: 1 13 34 16;
+    opacity: 0.64;
+    animation: mesh-route-flow 9s linear infinite;
+  }
+
+  .mesh-lane--mid {
+    animation-direction: reverse;
+    animation-duration: 11s;
+  }
+
+  .mesh-lane--bottom {
+    animation-duration: 13s;
+  }
+
+  .mesh-node {
+    transform-box: fill-box;
+    transform-origin: center;
+    transition: transform 500ms cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+
+  .mesh-node__body {
+    fill: var(--color-surface);
+    stroke: var(--color-border);
+    stroke-width: 1;
+    transition: stroke 300ms ease, fill 300ms ease;
+  }
+
+  .mesh-node__icon {
+    fill: var(--color-surface-2);
+    stroke: var(--color-border);
+    stroke-width: 0.8;
+  }
+
+  .mesh-node__symbol {
+    fill: none;
+    stroke: var(--color-muted);
+    stroke-width: 1.35;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .mesh-node__symbol-fill {
+    fill: var(--color-muted);
+  }
+
+  .mesh-node__title {
+    fill: var(--color-ink);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.09em;
+  }
+
+  .mesh-node__meta {
+    fill: var(--color-muted);
+    font-size: 7px;
+    letter-spacing: 0.14em;
+  }
+
+  .mesh-node__status {
+    fill: var(--color-teal);
+    animation: mesh-status 3.6s ease-in-out var(--status-delay) infinite;
+  }
+
+  .mesh-visual:hover .mesh-node--left {
+    transform: translateX(2px);
+  }
+
+  .mesh-visual:hover .mesh-node--right {
+    transform: translateX(-2px);
+  }
+
+  .mesh-visual:hover .mesh-node__body {
+    fill: color-mix(in srgb, var(--color-surface) 96%, var(--color-accent));
+    stroke: color-mix(in srgb, var(--color-accent) 26%, var(--color-border));
+  }
+
+  .mesh-core {
+    transform-box: fill-box;
+    transform-origin: center;
+  }
+
+  .mesh-core__body {
+    fill: var(--color-surface);
+    stroke: var(--color-border);
+    stroke-width: 1.1;
+  }
+
+  .mesh-core__edge {
+    fill: none;
+    stroke: url(#mesh-core-edge);
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    opacity: 0.78;
+  }
+
+  .mesh-core__brand {
+    transform-box: fill-box;
+    transform-origin: center;
+    transition: transform 600ms cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+
+  .mesh-visual:hover .mesh-core__brand {
+    transform: translateY(-2px);
+  }
+
+  .mesh-core__brand-tile {
+    fill: var(--color-surface-2);
+    stroke: var(--color-border);
+    stroke-width: 1;
+  }
+
+  .mesh-core__title {
+    fill: var(--color-ink);
+    font-size: 13px;
+    font-weight: 650;
+    letter-spacing: 0.18em;
+  }
+
+  .mesh-core__subtitle {
+    fill: var(--color-muted);
+    font-size: 7.5px;
+    letter-spacing: 0.17em;
+  }
+
+  .mesh-core__divider {
+    stroke: var(--color-border);
+    stroke-width: 1;
+  }
+
+  .mesh-core__modes text {
+    fill: var(--color-muted);
+    font-size: 6.5px;
+    letter-spacing: 0.1em;
+  }
+
+  .mesh-corners path {
+    fill: none;
+    stroke: var(--color-accent);
+    stroke-width: 1;
+    stroke-linecap: round;
+    stroke-dasharray: 47 47;
+    opacity: 0.36;
+    animation: mesh-corner-draw 5.5s ease-in-out infinite;
+  }
+
+  .mesh-corners path:nth-child(2),
+  .mesh-corners path:nth-child(4) {
+    animation-delay: -2.75s;
+  }
+
+  .mesh-visual:hover .mesh-lane {
+    opacity: 0.82;
+    animation-duration: 6.5s;
+  }
+
+  @keyframes mesh-scan-field {
+    0%, 12% { transform: translateX(0); opacity: 0; }
+    20% { opacity: 1; }
+    78% { opacity: 1; }
+    88%, 100% { transform: translateX(1050px); opacity: 0; }
+  }
+
+  @keyframes mesh-route-flow {
+    to { stroke-dashoffset: -128; }
+  }
+
+  @keyframes mesh-status {
+    0%, 100% { opacity: 0.35; }
+    50% { opacity: 1; }
+  }
+
+  @keyframes mesh-corner-draw {
+    0%, 100% { stroke-dashoffset: 92; opacity: 0.16; }
+    45%, 60% { stroke-dashoffset: 0; opacity: 0.48; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .mesh-scan,
+    .mesh-lane,
+    .mesh-node__status,
+    .mesh-corners path {
+      animation: none !important;
+    }
+
+    .mesh-scan {
+      display: none;
+    }
+
+    .mesh-node,
+    .mesh-core__brand {
+      transform: none !important;
+      transition: none !important;
+    }
+  }
+</style>

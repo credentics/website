@@ -1,6 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import OrbitGraphic from '../components/OrbitGraphic.astro';
+import MeshGraphic from '../components/MeshGraphic.astro';
 import WorkshopGraphic from '../components/WorkshopGraphic.astro';
 import BranchGraphic from '../components/BranchGraphic.astro';
 import NotesGraphic from '../components/NotesGraphic.astro';
@@ -52,7 +52,7 @@ const posts = (await getCollection('blog', ({ data }) => !data.draft))
             Talk to us
           </a>
         </div>
-        <OrbitGraphic class="mx-auto mt-12 h-auto w-full max-w-3xl" />
+        <MeshGraphic class="mx-auto mt-12 h-auto w-full max-w-3xl" />
       </div>
     </section>
 
