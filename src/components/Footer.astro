@@ -1,0 +1,40 @@
+---
+import Logo from './Logo.astro';
+const year = new Date().getFullYear();
+---
+
+<footer id="contact" class="border-t border-[var(--color-border)]">
+  <div class="mx-auto max-w-5xl px-6 py-14">
+    <div class="flex flex-col gap-10 sm:flex-row sm:justify-between">
+      <div class="max-w-sm">
+        <Logo />
+        <p class="mt-4 text-sm leading-relaxed text-[var(--color-muted)]">
+          Cloud-native security and identity, built in the open, working with
+          teams everywhere.
+        </p>
+      </div>
+      <div class="flex gap-16 text-sm">
+        <div>
+          <p class="mb-3 font-medium text-[var(--color-ink)]">Site</p>
+          <ul class="space-y-2 text-[var(--color-muted)]">
+            <li><a href="/workshops" class="hover:text-[var(--color-accent)]">Workshops</a></li>
+            <li><a href="/#open-source" class="hover:text-[var(--color-accent)]">Open source</a></li>
+            <li><a href="/docs/" class="hover:text-[var(--color-accent)]">Docs</a></li>
+            <li><a href="/blog" class="hover:text-[var(--color-accent)]">Blog</a></li>
+            <li><a href="/changelog" class="hover:text-[var(--color-accent)]">Changelog</a></li>
+          </ul>
+        </div>
+        <div>
+          <p class="mb-3 font-medium text-[var(--color-ink)]">Connect</p>
+          <ul class="space-y-2 text-[var(--color-muted)]">
+            <li><a href="mailto:hello@credentics.io" class="hover:text-[var(--color-accent)]">hello@credentics.io</a></li>
+            <li><a href="https://github.com/credentics" target="_blank" rel="noopener noreferrer" class="hover:text-[var(--color-accent)]">GitHub</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="mt-12 border-t border-[var(--color-border)] pt-6 text-xs text-[var(--color-muted)]">
+      <p>&copy; {year} Credentics. All rights reserved.</p>
+    </div>
+  </div>
+</footer>

@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://credentics.io/sitemap-index.xml

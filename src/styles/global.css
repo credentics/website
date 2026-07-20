@@ -1,0 +1,197 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-heading: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "Fragment Mono", ui-monospace, "SF Mono", monospace;
+
+  --color-bg: #ffffff;
+  --color-surface: #ffffff;
+  --color-surface-2: #f4f4f9;
+  --color-border: #e4e4ee;
+  --color-ink: #15142b;
+  --color-muted: #5c5a72;
+  --color-accent: #5b3df5;
+  --color-accent-dim: #4527d9;
+  --color-violet: #5b3df5;
+  --color-pink: #ff008a;
+  --color-teal: #2fd9b8;
+  --color-yellow: #ffc83a;
+  --color-blue: #4d7cfe;
+}
+
+html {
+  background-color: var(--color-bg);
+  color-scheme: light;
+}
+
+:root[data-theme='dark'] {
+  color-scheme: dark;
+  --color-bg: #0b0b14;
+  --color-surface: #14131f;
+  --color-surface-2: #1b1a2a;
+  --color-border: #2a2940;
+  --color-ink: #f2f1f8;
+  --color-muted: #9b98b3;
+  --color-accent: #8b6bff;
+  --color-accent-dim: #6e49ff;
+  --color-violet: #8b6bff;
+  --color-pink: #ff4da6;
+  --color-teal: #2fd9b8;
+  --color-yellow: #ffc83a;
+  --color-blue: #6f93ff;
+}
+
+:root[data-theme='dark'] .blob {
+  opacity: 0.35;
+}
+
+body {
+  background-color: var(--color-bg);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+::selection {
+  background-color: var(--color-accent);
+  color: var(--color-bg);
+}
+
+.blob {
+  position: absolute;
+  border-radius: 9999px;
+  filter: blur(60px);
+  opacity: 0.55;
+  pointer-events: none;
+}
+
+.grid-texture {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(to right, var(--color-border) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--color-border) 1px, transparent 1px);
+  background-size: 42px 42px;
+  opacity: 0.5;
+  mask-image: radial-gradient(ellipse 65% 55% at 50% 25%, black 35%, transparent 100%);
+  -webkit-mask-image: radial-gradient(ellipse 65% 55% at 50% 25%, black 35%, transparent 100%);
+  pointer-events: none;
+}
+
+/* Illustration motion */
+@keyframes spin-cw {
+  to { transform: rotate(360deg); }
+}
+@keyframes spin-ccw {
+  to { transform: rotate(-360deg); }
+}
+@keyframes node-pulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.35); opacity: 0.6; }
+}
+
+.orbit-ring {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: spin-cw 50s linear infinite;
+}
+.orbit-ring--reverse {
+  animation-name: spin-ccw;
+}
+.orbit-ring--slow {
+  animation-duration: 70s;
+}
+.orbit-ring--fast {
+  animation-duration: 34s;
+}
+
+.graphic-node {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: node-pulse 2.6s ease-in-out infinite;
+}
+
+.draw-path {
+  stroke-dasharray: 1000;
+  stroke-dashoffset: 1000;
+  transition: stroke-dashoffset 1.4s ease-out;
+}
+svg[data-draw].is-visible .draw-path {
+  stroke-dashoffset: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .orbit-ring,
+  .graphic-node {
+    animation: none !important;
+  }
+  .draw-path {
+    stroke-dashoffset: 0 !important;
+    transition: none !important;
+  }
+}
+
+.prose-post {
+  color: var(--color-ink);
+}
+.prose-post h2 {
+  font-family: var(--font-heading);
+  font-size: 1.375rem;
+  font-weight: 700;
+  margin-top: 2.25rem;
+  margin-bottom: 0.75rem;
+  color: var(--color-ink);
+}
+.prose-post h3 {
+  font-family: var(--font-heading);
+  font-size: 1.125rem;
+  font-weight: 700;
+  margin-top: 1.75rem;
+  margin-bottom: 0.5rem;
+}
+.prose-post p {
+  color: var(--color-muted);
+  line-height: 1.75;
+  margin-bottom: 1.25rem;
+}
+.prose-post a {
+  color: var(--color-accent);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.prose-post code {
+  background-color: var(--color-surface-2);
+  border: 1px solid var(--color-border);
+  border-radius: 0.25rem;
+  padding: 0.1rem 0.35rem;
+  font-family: var(--font-mono);
+  font-size: 0.875em;
+  color: var(--color-accent);
+}
+.prose-post pre {
+  background-color: var(--color-surface-2);
+  border: 1px solid var(--color-border);
+  border-radius: 0.5rem;
+  padding: 1rem;
+  overflow-x: auto;
+  margin-bottom: 1.25rem;
+}
+.prose-post pre code {
+  background: none;
+  border: none;
+  padding: 0;
+  color: var(--color-ink);
+}
+.prose-post ul {
+  list-style: disc;
+  padding-left: 1.25rem;
+  color: var(--color-muted);
+  margin-bottom: 1.25rem;
+}
+.prose-post li {
+  margin-bottom: 0.375rem;
+}
+.prose-post strong {
+  color: var(--color-ink);
+}

@@ -1,0 +1,255 @@
+---
+import Layout from '../layouts/Layout.astro';
+import WorkshopGraphic from '../components/WorkshopGraphic.astro';
+import BranchGraphic from '../components/BranchGraphic.astro';
+import NotesGraphic from '../components/NotesGraphic.astro';
+import ClusterGraphic from '../components/ClusterGraphic.astro';
+
+const formats = [
+  { label: 'Half-day or full-day', icon: 'clock' },
+  { label: 'Remote or on-site', icon: 'pin' },
+  { label: 'Small groups, hands-on labs', icon: 'users' },
+];
+
+const topics = [
+  {
+    title: 'Cloud-Native Security Fundamentals',
+    desc: 'Threat models for Kubernetes and cloud platforms — what actually changes versus traditional infra, and where teams get bitten first.',
+  },
+  {
+    title: 'OIDC & Workload Identity',
+    desc: 'Move your services and CI/CD pipelines from static, long-lived secrets to short-lived, cryptographically verifiable identity.',
+  },
+  {
+    title: 'Zero Trust in Practice',
+    desc: 'Design patterns for verifying every request on its own merits, instead of trusting anything inside the network perimeter.',
+  },
+  {
+    title: 'Kubernetes Hardening',
+    desc: 'RBAC that actually restricts, admission control, and supply-chain security for teams running production clusters.',
+  },
+  {
+    title: 'GitOps & Modern CI/CD',
+    desc: 'Get hands-on with Argo CD, Flux, Tekton, and Prow — build progressive delivery and CI/CD pipelines that fit how Kubernetes actually works.',
+  },
+];
+
+const agenda = [
+  { time: '09:00', label: 'Kickoff & threat model for your stack' },
+  { time: '10:30', label: 'Hands-on lab: issuing & verifying OIDC tokens' },
+  { time: '13:00', label: 'Zero trust patterns — live Q&A' },
+  { time: '15:00', label: 'Wrap-up, resources & next steps' },
+];
+
+const steps = [
+  { n: '01', title: 'Tell us about your stack', desc: 'A short call about what you run, your team’s level, and what "good" looks like for you.' },
+  { n: '02', title: 'We tailor the session', desc: 'No generic deck — labs and examples built around your actual infrastructure and threat model.' },
+  { n: '03', title: 'Hands-on session', desc: 'Remote or on-site, with your team at the keyboard, not just watching slides go by.' },
+];
+
+const toolCategories = [
+  { category: 'GitOps', tools: ['Argo CD', 'Flux'] },
+  { category: 'CI/CD', tools: ['Tekton', 'Prow', 'Jenkins X'] },
+  { category: 'Policy & admission', tools: ['OPA / Gatekeeper', 'Kyverno'] },
+  { category: 'Secrets & identity', tools: ['Vault', 'cert-manager', 'SPIFFE / SPIRE'] },
+  { category: 'Service mesh', tools: ['Istio', 'Linkerd'] },
+  { category: 'Supply chain', tools: ['Sigstore / Cosign', 'Trivy', 'Renovate'] },
+  { category: 'Cloud infra via Kubernetes', tools: ['AWS ACK', 'Config Connector (KCC)'] },
+  { category: 'Node & runtime security', tools: ['Bottlerocket', 'gVisor'] },
+  { category: 'Custom operators & controllers', tools: ['Kubebuilder', 'Operator SDK', 'controller-runtime'] },
+];
+---
+
+<Layout
+  title="Workshops"
+  description="Hands-on workshops, open-source adoption, and ongoing support for cloud-native security, GitOps, and CI/CD teams."
+>
+  <main id="main-content">
+    <!-- Hero -->
+    <section class="relative -mt-20 overflow-hidden pt-20 sm:-mt-24 sm:pt-24">
+      <div class="grid-texture"></div>
+      <div class="blob -top-32 left-[-10%] h-[380px] w-[65%] rotate-[-8deg] bg-[var(--color-teal)]"></div>
+      <div class="blob -top-24 right-[-15%] h-[340px] w-[60%] rotate-[10deg] bg-[var(--color-yellow)]"></div>
+      <div class="relative mx-auto max-w-3xl px-6 pt-24 pb-16 text-center">
+        <span class="inline-flex items-center gap-2 rounded-full border border-[var(--color-border)] bg-[var(--color-surface)] px-3.5 py-1 font-mono text-xs text-[var(--color-muted)]">
+          <span class="h-1.5 w-1.5 rounded-full bg-[var(--color-accent)]"></span>
+          Now booking early engagements
+        </span>
+        <h1 class="mx-auto mt-7 font-heading text-5xl font-bold leading-[1.05] tracking-tighter text-[var(--color-ink)] sm:text-6xl">
+          Workshops, adoption &amp; support
+        </h1>
+        <p class="mx-auto mt-5 max-w-xl text-base leading-relaxed text-[var(--color-muted)] sm:text-lg">
+          Hands-on sessions for engineering and platform teams — from OIDC
+          fundamentals to zero-trust workload identity in Kubernetes. And once
+          your team is sold on a tool, we'll help you actually roll it out and
+          support it, so adopting open source doesn't become its own headache.
+        </p>
+        <div class="mt-9 flex flex-wrap items-center justify-center gap-3">
+          <a
+            href="mailto:hello@credentics.io?subject=Workshop%20inquiry"
+            class="rounded-full bg-[var(--color-accent)] px-5 py-2.5 text-sm font-medium text-white transition-opacity hover:opacity-90"
+          >
+            Book a workshop
+          </a>
+        </div>
+      </div>
+      <div class="relative mx-auto max-w-3xl px-6 pb-20">
+        <div class="flex flex-wrap justify-center gap-3">
+          {formats.map((f) => (
+            <span class="inline-flex items-center gap-2 rounded-full border border-[var(--color-border)] bg-[var(--color-surface)] px-4 py-2 font-mono text-xs text-[var(--color-muted)]">
+              {f.icon === 'clock' && (
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" class="text-[var(--color-accent)]"><circle cx="12" cy="12" r="8.5" stroke="currentColor" stroke-width="1.6"/><path d="M12 7.5V12l3 2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              )}
+              {f.icon === 'pin' && (
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" class="text-[var(--color-accent)]"><path d="M12 21s6.5-6.1 6.5-11A6.5 6.5 0 0 0 5.5 10c0 4.9 6.5 11 6.5 11Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><circle cx="12" cy="10" r="2.2" stroke="currentColor" stroke-width="1.6"/></svg>
+              )}
+              {f.icon === 'users' && (
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" class="text-[var(--color-accent)]"><circle cx="9" cy="8.5" r="2.8" stroke="currentColor" stroke-width="1.6"/><path d="M3.5 19c.6-3 2.7-4.7 5.5-4.7s4.9 1.7 5.5 4.7" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><circle cx="17" cy="9.5" r="2.2" stroke="currentColor" stroke-width="1.6"/><path d="M15.8 14.6c2.1.3 3.6 1.7 4.1 4.1" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+              )}
+              {f.label}
+            </span>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- Topics -->
+    <section class="mx-auto max-w-5xl px-6 py-20">
+      <div class="flex items-start justify-between gap-6">
+        <div class="max-w-xl">
+          <h2 class="font-mono text-sm font-medium uppercase tracking-wider text-[var(--color-accent)]">Session topics</h2>
+          <p class="mt-3 font-heading text-3xl font-bold tracking-tight text-[var(--color-ink)]">
+            Pick a starting point — we'll tailor it to your stack.
+          </p>
+        </div>
+        <WorkshopGraphic class="hidden h-28 w-28 shrink-0 sm:block" />
+      </div>
+      <div class="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        {topics.map((t) => (
+          <div class="rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] p-6 transition-colors hover:border-[var(--color-accent-dim)]">
+            <h3 class="font-medium text-[var(--color-ink)]">{t.title}</h3>
+            <p class="mt-2 text-sm leading-relaxed text-[var(--color-muted)]">{t.desc}</p>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <!-- Adoption & support -->
+    <section id="adoption-support" class="border-t border-[var(--color-border)]">
+      <div class="mx-auto max-w-5xl px-6 py-20">
+        <div class="flex items-start justify-between gap-6">
+          <div class="max-w-xl">
+            <h2 class="font-mono text-sm font-medium uppercase tracking-wider text-[var(--color-accent)]">Adoption &amp; support</h2>
+            <p class="mt-3 font-heading text-3xl font-bold tracking-tight text-[var(--color-ink)]">
+              Adopting open source shouldn't feel like a science project.
+            </p>
+          </div>
+          <BranchGraphic class="hidden h-24 w-24 shrink-0 sm:block" />
+        </div>
+        <div class="max-w-xl">
+          <p class="mt-4 text-sm leading-relaxed text-[var(--color-muted)]">
+            A new tool is easy in a demo and hard in production. We help you go
+            from proof-of-concept to a real rollout — installation,
+            configuration, migrating off legacy tooling, building custom
+            Kubernetes operators and controllers when off-the-shelf tooling
+            doesn't quite fit, and getting your team comfortable operating it
+            day to day. Once it's live, we stay on for ongoing support, so a
+            broken upgrade or a confusing GitHub issue thread doesn't become
+            your problem alone.
+          </p>
+          <p class="mt-4 text-sm leading-relaxed text-[var(--color-muted)]">
+            In practice that spans everything from OS and runtime hardening
+            to cloud infrastructure managed declaratively through Kubernetes
+            to automating CVE remediation so upgrades show up as pull requests
+            instead of a "dependency debt" sprint that keeps getting pushed to
+            next quarter. See below for concrete examples of what that looks
+            like today.
+          </p>
+        </div>
+
+        <div class="mt-12">
+          <p class="font-mono text-xs font-medium uppercase tracking-wider text-[var(--color-muted)]">Tools we work with</p>
+          <div class="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {toolCategories.map((c) => (
+              <div class="rounded-xl border border-[var(--color-border)] bg-[var(--color-surface)] p-5">
+                <p class="text-xs font-medium text-[var(--color-accent)]">{c.category}</p>
+                <div class="mt-3 flex flex-wrap gap-2">
+                  {c.tools.map((tool) => (
+                    <span class="rounded-md border border-[var(--color-border)] bg-[var(--color-surface-2)] px-2.5 py-1 font-mono text-xs text-[var(--color-ink)]">
+                      {tool}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+          <p class="mt-6 text-sm text-[var(--color-muted)]">
+            Not on the list? If it's part of the cloud-native or DevOps/platform
+            toolchain, ask us — this is a starting point, not the limit.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Sample agenda -->
+    <section class="border-t border-[var(--color-border)] bg-[var(--color-surface)]/40">
+      <div class="mx-auto max-w-5xl px-6 py-20">
+        <div class="grid gap-12 sm:grid-cols-2 sm:items-start">
+          <div>
+            <div class="flex items-start justify-between gap-6">
+              <h2 class="font-mono text-sm font-medium uppercase tracking-wider text-[var(--color-accent)]">What a session looks like</h2>
+              <NotesGraphic class="hidden h-20 w-20 shrink-0 sm:block" />
+            </div>
+            <p class="mt-3 font-heading text-3xl font-bold tracking-tight text-[var(--color-ink)]">
+              A typical half-day, OIDC-focused session.
+            </p>
+            <p class="mt-4 text-sm leading-relaxed text-[var(--color-muted)]">
+              Every session is scoped to your team, but here's a real shape for a
+              half-day workshop on workload identity — mostly hands-on, minimal
+              slides.
+            </p>
+          </div>
+          <ol class="relative border-l border-[var(--color-border)] pl-6">
+            {agenda.map((a) => (
+              <li class="relative pb-9 last:pb-0">
+                <span class="absolute -left-[1.6rem] top-0.5 h-2.5 w-2.5 rounded-full bg-[var(--color-accent)] ring-4 ring-[var(--color-bg)]"></span>
+                <p class="font-mono text-xs text-[var(--color-accent)]">{a.time}</p>
+                <p class="mt-1 text-sm text-[var(--color-ink)]">{a.label}</p>
+              </li>
+            ))}
+          </ol>
+        </div>
+      </div>
+    </section>
+
+    <!-- How it works -->
+    <section class="mx-auto max-w-5xl px-6 py-20">
+      <div class="flex items-start justify-between gap-6">
+        <div class="max-w-xl">
+          <h2 class="font-mono text-sm font-medium uppercase tracking-wider text-[var(--color-accent)]">How it works</h2>
+          <p class="mt-3 font-heading text-3xl font-bold tracking-tight text-[var(--color-ink)]">
+            Three steps, no procurement headache.
+          </p>
+        </div>
+        <ClusterGraphic class="hidden h-24 w-24 shrink-0 sm:block" />
+      </div>
+      <div class="mt-12 grid gap-8 sm:grid-cols-3">
+        {steps.map((s) => (
+          <div>
+            <p class="font-mono text-sm text-[var(--color-accent-dim)]">{s.n}</p>
+            <h3 class="mt-2 font-medium text-[var(--color-ink)]">{s.title}</h3>
+            <p class="mt-2 text-sm leading-relaxed text-[var(--color-muted)]">{s.desc}</p>
+          </div>
+        ))}
+      </div>
+      <div class="mt-14 flex justify-center">
+        <a
+          href="mailto:hello@credentics.io?subject=Workshop%2Fadoption%20inquiry"
+          class="rounded-full bg-[var(--color-accent)] px-6 py-3 text-sm font-medium text-white transition-opacity hover:opacity-90"
+        >
+          Let's talk workshops
+        </a>
+      </div>
+    </section>
+  </main>
+</Layout>

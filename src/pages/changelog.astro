@@ -1,0 +1,36 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const entries = [
+  {
+    date: '2026-07-20',
+    title: 'Workshops & training page launched',
+    desc: 'Published session topics, sample agenda, and how adoption & support engagements work. Opened early-access signups.',
+  },
+  {
+    date: '2026-07-17',
+    title: 'Site went live',
+    desc: 'credentics.io launched, along with the first blog post explaining why we started the company.',
+  },
+];
+---
+
+<Layout title="Changelog" description="What's changed at Credentics, in order.">
+  <main id="main-content" class="mx-auto max-w-2xl px-6 py-20">
+    <h1 class="font-heading text-5xl font-bold tracking-tighter text-[var(--color-ink)]">Changelog</h1>
+    <p class="mt-3 text-[var(--color-muted)]">
+      What actually happened, in order — no roadmap, just the log.
+    </p>
+
+    <ol class="mt-12 border-l border-[var(--color-border)] pl-6">
+      {entries.map((entry) => (
+        <li class="relative pb-10 last:pb-0">
+          <span class="absolute -left-[1.6rem] top-1 h-2.5 w-2.5 rounded-full bg-[var(--color-accent)] ring-4 ring-[var(--color-bg)]"></span>
+          <p class="font-mono text-xs text-[var(--color-accent)]">{entry.date}</p>
+          <h2 class="mt-1.5 font-medium text-[var(--color-ink)]">{entry.title}</h2>
+          <p class="mt-1.5 text-sm leading-relaxed text-[var(--color-muted)]">{entry.desc}</p>
+        </li>
+      ))}
+    </ol>
+  </main>
+</Layout>

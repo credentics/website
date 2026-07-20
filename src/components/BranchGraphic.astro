@@ -1,0 +1,22 @@
+---
+interface Props {
+  class?: string;
+}
+const { class: className = '' } = Astro.props;
+---
+
+<svg viewBox="0 0 160 160" fill="none" xmlns="http://www.w3.org/2000/svg" class={className} aria-hidden="true" data-draw>
+  <defs>
+    <linearGradient id="bg-a" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="var(--color-pink)" />
+      <stop offset="100%" stop-color="var(--color-accent)" />
+    </linearGradient>
+  </defs>
+  <path d="M40 30v50c0 16 14 22 30 22" stroke="url(#bg-a)" stroke-width="2.5" stroke-linecap="round" class="draw-path" />
+  <path d="M40 80c0-16 14-22 30-22h20" stroke="var(--color-teal)" stroke-width="2.5" stroke-linecap="round" class="draw-path" style="transition-delay: 0.3s" />
+  <circle cx="40" cy="30" r="9" fill="var(--color-surface)" stroke="url(#bg-a)" stroke-width="2.5" class="graphic-node" style="animation-delay: 0s" />
+  <circle cx="40" cy="102" r="9" fill="var(--color-surface)" stroke="var(--color-accent)" stroke-width="2.5" class="graphic-node" style="animation-delay: 0.5s" />
+  <circle cx="120" cy="58" r="9" fill="var(--color-surface)" stroke="var(--color-teal)" stroke-width="2.5" class="graphic-node" style="animation-delay: 1s" />
+  <circle cx="90" cy="30" r="4" fill="var(--color-yellow)" class="graphic-node" style="animation-delay: 1.5s" />
+  <circle cx="130" cy="102" r="4" fill="var(--color-blue)" class="graphic-node" style="animation-delay: 2s" />
+</svg>

@@ -1,0 +1,20 @@
+---
+interface Props {
+  class?: string;
+}
+const { class: className = '' } = Astro.props;
+---
+
+<svg viewBox="0 0 160 160" fill="none" xmlns="http://www.w3.org/2000/svg" class={className} aria-hidden="true" data-draw>
+  <defs>
+    <linearGradient id="ng-a" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="var(--color-blue)" />
+      <stop offset="100%" stop-color="var(--color-pink)" />
+    </linearGradient>
+  </defs>
+  <rect x="30" y="20" width="80" height="100" rx="8" fill="var(--color-surface)" stroke="var(--color-border)" stroke-width="2" transform="rotate(-6 70 70)" class="draw-path" />
+  <rect x="46" y="34" width="80" height="100" rx="8" fill="var(--color-surface)" stroke="url(#ng-a)" stroke-width="2" transform="rotate(4 86 84)" class="draw-path" style="transition-delay: 0.3s" />
+  <path d="M64 60h48M64 76h48M64 92h30" stroke="var(--color-muted)" stroke-width="2.5" stroke-linecap="round" stroke-opacity="0.5" transform="rotate(4 86 84)" class="draw-path" style="transition-delay: 0.6s" />
+  <circle cx="120" cy="46" r="5" fill="var(--color-yellow)" class="graphic-node" style="animation-delay: 0.2s" />
+  <circle cx="52" cy="118" r="5" fill="var(--color-teal)" class="graphic-node" style="animation-delay: 0.9s" />
+</svg>
