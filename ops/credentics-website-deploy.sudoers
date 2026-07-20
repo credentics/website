@@ -1,0 +1,1 @@
+deploy ALL=(root) NOPASSWD: /usr/bin/systemctl restart credentics-website.service, /usr/bin/systemctl is-active credentics-website.service

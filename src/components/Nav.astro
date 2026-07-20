@@ -49,15 +49,156 @@ const links = [
           <path d="M20 14.5A8.5 8.5 0 1 1 9.5 4a7 7 0 0 0 10.5 10.5Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" />
         </svg>
       </button>
-      <a
-        href="mailto:hello@credentics.io"
+      <button
+        type="button"
+        data-connect-trigger
         class="rounded-full bg-[var(--color-accent)] px-5 py-2 text-white transition-opacity hover:opacity-90"
       >
         Say hello
-      </a>
+      </button>
     </div>
   </nav>
 </header>
+
+<dialog
+  id="connect-dialog"
+  aria-labelledby="connect-title"
+  class="connect-dialog m-auto max-h-[calc(100dvh-2rem)] w-[calc(100%-2rem)] max-w-xl overflow-y-auto rounded-3xl border border-[var(--color-border)] bg-[var(--color-surface)] p-0 text-[var(--color-ink)] shadow-2xl"
+>
+  <div class="relative overflow-hidden p-6 sm:p-8">
+    <div class="blob -top-24 -right-20 h-48 w-48 bg-[var(--color-pink)] opacity-25"></div>
+    <div class="blob -bottom-28 -left-20 h-52 w-52 bg-[var(--color-blue)] opacity-25"></div>
+
+    <button
+      type="button"
+      data-dialog-close
+      aria-label="Close connection form"
+      class="absolute top-5 right-5 z-10 flex h-9 w-9 items-center justify-center rounded-full border border-[var(--color-border)] text-[var(--color-muted)] transition-colors hover:border-[var(--color-accent)] hover:text-[var(--color-accent)]"
+    >
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path d="m6 6 12 12M18 6 6 18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
+      </svg>
+    </button>
+
+    <div class="relative">
+      <p class="font-mono text-xs font-medium uppercase tracking-[0.18em] text-[var(--color-accent)]">Open a connection</p>
+      <h2 id="connect-title" class="mt-3 max-w-md font-heading text-3xl font-bold tracking-tight sm:text-4xl">
+        What are you building?
+      </h2>
+      <p class="mt-3 max-w-md text-sm leading-relaxed text-[var(--color-muted)]">
+        Give us the short version. We’ll read it, think about it, and get back to you like humans do.
+      </p>
+
+      <form id="connect-form" action="/api/connect" method="POST" class="mt-7 space-y-5">
+        <div class="grid gap-5 sm:grid-cols-2">
+          <label class="block text-sm font-medium">
+            Your name
+            <input
+              type="text"
+              name="name"
+              required
+              minlength="2"
+              maxlength="80"
+              autocomplete="name"
+              placeholder="Ada Lovelace"
+              class="mt-2 w-full rounded-xl border border-[var(--color-border)] bg-[var(--color-bg)] px-4 py-3 text-sm outline-none transition focus:border-[var(--color-accent)] focus:ring-3 focus:ring-[var(--color-accent)]/10"
+            />
+          </label>
+          <label class="block text-sm font-medium">
+            Work email
+            <input
+              type="email"
+              name="email"
+              required
+              maxlength="254"
+              autocomplete="email"
+              placeholder="ada@team.dev"
+              class="mt-2 w-full rounded-xl border border-[var(--color-border)] bg-[var(--color-bg)] px-4 py-3 text-sm outline-none transition focus:border-[var(--color-accent)] focus:ring-3 focus:ring-[var(--color-accent)]/10"
+            />
+          </label>
+        </div>
+
+        <div class="grid gap-5 sm:grid-cols-2">
+          <label class="block text-sm font-medium">
+            Team <span class="font-normal text-[var(--color-muted)]">(optional)</span>
+            <input
+              type="text"
+              name="company"
+              maxlength="120"
+              autocomplete="organization"
+              placeholder="Your company"
+              class="mt-2 w-full rounded-xl border border-[var(--color-border)] bg-[var(--color-bg)] px-4 py-3 text-sm outline-none transition focus:border-[var(--color-accent)] focus:ring-3 focus:ring-[var(--color-accent)]/10"
+            />
+          </label>
+          <label class="block text-sm font-medium">
+            Looking for
+            <select
+              name="topic"
+              required
+              class="mt-2 w-full rounded-xl border border-[var(--color-border)] bg-[var(--color-bg)] px-4 py-3 text-sm outline-none transition focus:border-[var(--color-accent)] focus:ring-3 focus:ring-[var(--color-accent)]/10"
+            >
+              <option value="workshop">Workshop or training</option>
+              <option value="adoption">Adoption and support</option>
+              <option value="collaboration">Open-source collaboration</option>
+              <option value="other">Something else</option>
+            </select>
+          </label>
+        </div>
+
+        <label class="block text-sm font-medium">
+          The short version
+          <textarea
+            name="message"
+            required
+            minlength="12"
+            maxlength="1200"
+            rows="4"
+            placeholder="We’re trying to…"
+            class="mt-2 w-full resize-none rounded-xl border border-[var(--color-border)] bg-[var(--color-bg)] px-4 py-3 text-sm leading-relaxed outline-none transition focus:border-[var(--color-accent)] focus:ring-3 focus:ring-[var(--color-accent)]/10"
+          ></textarea>
+        </label>
+
+        <div class="pointer-events-none absolute -left-[10000px]" aria-hidden="true">
+          <label>
+            Website
+            <input type="text" name="website" tabindex="-1" autocomplete="off" />
+          </label>
+        </div>
+        <input type="hidden" name="startedAt" value="" />
+
+        <div class="flex flex-col-reverse gap-3 pt-1 sm:flex-row sm:items-center sm:justify-between">
+          <p id="connect-result" class="min-h-5 text-sm text-[var(--color-muted)]" aria-live="polite"></p>
+          <button
+            type="submit"
+            class="group inline-flex shrink-0 items-center justify-center gap-2 rounded-full bg-[var(--color-accent)] px-6 py-3 text-sm font-medium text-white transition hover:scale-[1.02] disabled:cursor-wait disabled:opacity-60"
+          >
+            <span data-submit-label>Send hello</span>
+            <span aria-hidden="true" class="transition-transform group-hover:translate-x-0.5">→</span>
+          </button>
+        </div>
+      </form>
+
+      <div id="connect-success" class="hidden py-10 text-center">
+        <span class="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-[var(--color-teal)]/15 text-[var(--color-teal)]">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="m5 12 4.5 4.5L19 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+        </span>
+        <h3 class="mt-5 font-heading text-2xl font-bold">Connection open.</h3>
+        <p class="mx-auto mt-2 max-w-sm text-sm leading-relaxed text-[var(--color-muted)]">
+          Your note made it through. We’ll be in touch soon.
+        </p>
+        <button
+          type="button"
+          data-dialog-close
+          class="mt-6 rounded-full border border-[var(--color-border)] px-5 py-2.5 text-sm font-medium transition-colors hover:border-[var(--color-accent)] hover:text-[var(--color-accent)]"
+        >
+          Back to the site
+        </button>
+      </div>
+    </div>
+  </div>
+</dialog>
 
 <script>
   const root = document.documentElement;
@@ -77,5 +218,64 @@ const links = [
     root.dataset.theme = next;
     localStorage.setItem('theme', next);
     sync();
+  });
+
+  const dialog = document.getElementById('connect-dialog') as HTMLDialogElement | null;
+  const connectForm = document.getElementById('connect-form') as HTMLFormElement | null;
+  const connectSuccess = document.getElementById('connect-success');
+  const connectResult = document.getElementById('connect-result');
+  const startedAt = connectForm?.elements.namedItem('startedAt') as HTMLInputElement | null;
+
+  document.querySelectorAll<HTMLElement>('[data-connect-trigger]').forEach((trigger) => {
+    trigger.addEventListener('click', () => {
+      if (!dialog) return;
+      connectForm?.classList.remove('hidden');
+      connectSuccess?.classList.add('hidden');
+      if (connectResult) connectResult.textContent = '';
+      if (startedAt) startedAt.value = Date.now().toString();
+      dialog.showModal();
+    });
+  });
+
+  document.querySelectorAll<HTMLElement>('[data-dialog-close]').forEach((closeButton) => {
+    closeButton.addEventListener('click', () => dialog?.close());
+  });
+
+  dialog?.addEventListener('click', (event) => {
+    if (event.target === dialog) dialog.close();
+  });
+
+  connectForm?.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    const submitButton = connectForm.querySelector<HTMLButtonElement>('button[type="submit"]');
+    const submitLabel = connectForm.querySelector<HTMLElement>('[data-submit-label]');
+
+    if (submitButton) submitButton.disabled = true;
+    if (submitLabel) submitLabel.textContent = 'Sending…';
+    if (connectResult) connectResult.textContent = '';
+
+    try {
+      const formData = new FormData(connectForm);
+      const response = await fetch(connectForm.action, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify(Object.fromEntries(formData)),
+      });
+      const body = await response.json() as { error?: string };
+
+      if (!response.ok) throw new Error(body.error || 'The message did not make it through.');
+
+      connectForm.reset();
+      connectForm.classList.add('hidden');
+      connectSuccess?.classList.remove('hidden');
+    } catch (error) {
+      if (connectResult) {
+        connectResult.textContent = error instanceof Error ? error.message : 'The message did not make it through.';
+        connectResult.className = 'min-h-5 text-sm text-[#ef4444]';
+      }
+    } finally {
+      if (submitButton) submitButton.disabled = false;
+      if (submitLabel) submitLabel.textContent = 'Send hello';
+    }
   });
 </script>

@@ -58,6 +58,22 @@ body {
   color: var(--color-bg);
 }
 
+.connect-dialog::backdrop {
+  background: color-mix(in srgb, #080711 72%, transparent);
+  backdrop-filter: blur(8px);
+}
+
+.connect-dialog[open] {
+  animation: connect-in 180ms ease-out;
+}
+
+@keyframes connect-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.98);
+  }
+}
+
 .blob {
   position: absolute;
   border-radius: 9999px;
@@ -80,30 +96,9 @@ body {
 }
 
 /* Illustration motion */
-@keyframes spin-cw {
-  to { transform: rotate(360deg); }
-}
-@keyframes spin-ccw {
-  to { transform: rotate(-360deg); }
-}
 @keyframes node-pulse {
   0%, 100% { transform: scale(1); opacity: 1; }
   50% { transform: scale(1.35); opacity: 0.6; }
-}
-
-.orbit-ring {
-  transform-box: fill-box;
-  transform-origin: center;
-  animation: spin-cw 50s linear infinite;
-}
-.orbit-ring--reverse {
-  animation-name: spin-ccw;
-}
-.orbit-ring--slow {
-  animation-duration: 70s;
-}
-.orbit-ring--fast {
-  animation-duration: 34s;
 }
 
 .graphic-node {
@@ -122,7 +117,7 @@ svg[data-draw].is-visible .draw-path {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .orbit-ring,
+  .connect-dialog[open],
   .graphic-node {
     animation: none !important;
   }
