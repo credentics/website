@@ -79,20 +79,5 @@ visudo -cf /etc/sudoers.d/credentics-website-deploy
 systemctl daemon-reload
 systemctl enable "$service_name"
 
-nginx_site="/etc/nginx/sites-available/credentics.io.conf"
-nginx_backup="$(mktemp "${nginx_site}.backup.XXXXXX")"
-cp --preserve=all "$nginx_site" "$nginx_backup"
-install -o root -g root -m 644 "$script_dir/nginx-credentics.io.conf" "$nginx_site"
-
-if ! nginx -t; then
-  cp --preserve=all "$nginx_backup" "$nginx_site"
-  nginx -t
-  echo "Nginx validation failed; restored $nginx_backup" >&2
-  exit 1
-fi
-
-systemctl reload nginx
-
 printf 'Node: %s\n' "$(node --version)"
 printf 'Service enabled: %s (not started)\n' "$service_name"
-printf 'Nginx backup: %s\n' "$nginx_backup"

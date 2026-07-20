@@ -53,12 +53,23 @@ jobs:
 
       - name: Configure SSH
         env:
+          DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
           DEPLOY_SSH_KEY: ${{ secrets.DEPLOY_SSH_KEY }}
         run: |
           set -euo pipefail
           install -d -m 700 "$HOME/.ssh"
           printf '%s\n' "$DEPLOY_SSH_KEY" > "$RUNNER_TEMP/deploy_key"
           chmod 600 "$RUNNER_TEMP/deploy_key"
+
+          known_hosts="$RUNNER_TEMP/known_hosts"
+          expected_fingerprint="SHA256:iC9bBiH603E3w9+XXBOu61JKZv85hYl7AJ6hbM9CtG0"
+          ssh-keyscan -T 10 -t ed25519 "$DEPLOY_HOST" > "$known_hosts"
+          scanned_fingerprint="$(ssh-keygen -lf "$known_hosts" -E sha256 | awk 'NR == 1 { print $2 }')"
+          if [[ "$scanned_fingerprint" != "$expected_fingerprint" ]]; then
+            echo "Production SSH host fingerprint mismatch." >&2
+            exit 1
+          fi
+          chmod 600 "$known_hosts"
 
       - name: Upload release
         env:
@@ -72,13 +83,13 @@ jobs:
             -i "$RUNNER_TEMP/deploy_key"
             -o BatchMode=yes
             -o IdentitiesOnly=yes
-            -o UserKnownHostsFile="$GITHUB_WORKSPACE/ops/known_hosts"
-            -o HostKeyAlias=credentics-production
+            -o StrictHostKeyChecking=yes
+            -o UserKnownHostsFile="$RUNNER_TEMP/known_hosts"
           )
 
           ssh "${ssh_options[@]}" "$remote" mkdir -p -- "$release"
           rsync -az --delete \
-            -e "ssh -i $RUNNER_TEMP/deploy_key -o BatchMode=yes -o IdentitiesOnly=yes -o UserKnownHostsFile=$GITHUB_WORKSPACE/ops/known_hosts -o HostKeyAlias=credentics-production" \
+            -e "ssh -i $RUNNER_TEMP/deploy_key -o BatchMode=yes -o IdentitiesOnly=yes -o StrictHostKeyChecking=yes -o UserKnownHostsFile=$RUNNER_TEMP/known_hosts" \
             .release/ "$remote:$release/"
 
       - name: Install runtime environment
@@ -98,8 +109,8 @@ jobs:
             -i "$RUNNER_TEMP/deploy_key"
             -o BatchMode=yes
             -o IdentitiesOnly=yes
-            -o UserKnownHostsFile="$GITHUB_WORKSPACE/ops/known_hosts"
-            -o HostKeyAlias=credentics-production
+            -o StrictHostKeyChecking=yes
+            -o UserKnownHostsFile="$RUNNER_TEMP/known_hosts"
           )
 
           ssh "${ssh_options[@]}" "$remote" mkdir -p -- "$DEPLOY_ROOT/shared"
@@ -120,8 +131,8 @@ jobs:
             -i "$RUNNER_TEMP/deploy_key"
             -o BatchMode=yes
             -o IdentitiesOnly=yes
-            -o UserKnownHostsFile="$GITHUB_WORKSPACE/ops/known_hosts"
-            -o HostKeyAlias=credentics-production
+            -o StrictHostKeyChecking=yes
+            -o UserKnownHostsFile="$RUNNER_TEMP/known_hosts"
           )
 
           ssh "${ssh_options[@]}" "$remote" bash -s -- "$DEPLOY_ROOT" "$GITHUB_SHA" <<'REMOTE'
