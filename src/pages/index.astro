@@ -11,14 +11,14 @@ const posts = (await getCollection('blog', ({ data }) => !data.draft))
   .slice(0, 3);
 ---
 
-<Layout title="Cloud-native security & identity">
+<Layout title="Cloud-native identity, security & sovereignty">
   <main id="main-content">
     <!-- Hero -->
     <section class="relative -mt-20 overflow-hidden pt-20 sm:-mt-24 sm:pt-24">
       <div class="grid-texture"></div>
       <div class="blob -top-32 left-[-10%] h-[420px] w-[70%] rotate-[-8deg] bg-[var(--color-blue)]"></div>
       <div class="blob -top-24 right-[-15%] h-[380px] w-[65%] rotate-[10deg] bg-[var(--color-pink)]"></div>
-      <div class="relative mx-auto max-w-5xl px-6 pt-24 pb-28 text-center">
+      <div class="relative mx-auto max-w-5xl px-6 pt-14 pb-16 text-center">
         <span class="inline-flex items-center gap-2 rounded-full border border-[var(--color-border)] bg-[var(--color-surface)] px-3.5 py-1 font-mono text-xs text-[var(--color-muted)]">
           <span class="h-1.5 w-1.5 rounded-full bg-[var(--color-accent)]"></span>
           Open source · Pre-launch
@@ -39,20 +39,31 @@ const posts = (await getCollection('blog', ({ data }) => !data.draft))
           </em>
         </h1>
         <p class="mx-auto mt-7 max-w-xl text-base leading-relaxed text-[var(--color-muted)] sm:text-lg">
-          Credentics builds open-source identity infra for the cloud-native world —
-          OIDC-native, Kubernetes-shaped, and allergic to long-lived secrets sitting
-          around waiting to leak.
+          A cloud-native, open-source studio for digital identity, security, and
+          sovereignty. We help organizations prove who's who — people and the AI
+          agents acting for them — and keep control of their own data, for the
+          citizens and professionals who depend on it. Built in the open.
         </p>
         <div class="mt-9 flex flex-wrap items-center justify-center gap-3">
-          <a
-            href="mailto:hello@credentics.io"
+          <button
+            type="button"
+            data-connect-trigger
             class="group relative rounded-full bg-[var(--color-accent)] px-7 py-3 text-sm font-medium text-white transition-transform hover:scale-[1.03]"
           >
             <span class="absolute inset-x-3 -bottom-1.5 -z-10 h-full rounded-full bg-[var(--color-accent)]/40 blur-md transition-opacity group-hover:opacity-70"></span>
             Talk to us
+          </button>
+          <a
+            href="/changelog"
+            class="rounded-full border border-[var(--color-border)] px-7 py-3 text-sm font-medium text-[var(--color-ink)] transition-colors hover:border-[var(--color-accent)] hover:text-[var(--color-accent)]"
+          >
+            Watch the first release
           </a>
         </div>
-        <MeshGraphic class="mx-auto mt-12 h-auto w-full max-w-3xl" />
+        <MeshGraphic class="mx-auto mt-10 h-auto w-full max-w-3xl" />
+        <p class="mx-auto mt-5 max-w-md text-sm text-[var(--color-muted)]">
+          Verifiable trust, everywhere it's needed — nothing sensitive left lying around.
+        </p>
       </div>
     </section>
 
@@ -60,30 +71,84 @@ const posts = (await getCollection('blog', ({ data }) => !data.draft))
     <section id="what-we-do" class="relative mx-auto max-w-5xl overflow-hidden px-6 py-20">
       <h2 class="font-mono text-sm font-medium uppercase tracking-wider text-[var(--color-accent)]">What we do</h2>
       <p class="mt-3 max-w-xl font-heading text-3xl font-bold tracking-tight text-[var(--color-ink)]">
-        Three ways we help teams get identity right.
+        One path to identity you actually own.
+      </p>
+      <p class="mt-3 max-w-xl text-sm leading-relaxed text-[var(--color-muted)]">
+        Learn it, adopt it, own it — three stages of the same relationship, not three products to buy.
       </p>
       <div class="mt-10 grid gap-8 sm:grid-cols-3">
         <a href="#workshops" class="group block">
-          <p class="font-mono text-xs text-[var(--color-accent)]">01</p>
+          <p class="font-mono text-xs text-[var(--color-accent)]">01 · Learn</p>
           <h3 class="mt-2 font-medium text-[var(--color-ink)] group-hover:text-[var(--color-accent)]">Workshops &amp; training</h3>
           <p class="mt-2 text-sm leading-relaxed text-[var(--color-muted)]">
-            Hands-on sessions on OIDC, zero trust, and Kubernetes hardening — scoped to your actual stack, not a generic deck.
+            Hands-on sessions across digital identity, security, and sovereignty — including securing AI systems and the agents that act on them — scoped to your actual context.
           </p>
         </a>
         <a href="/workshops#adoption-support" class="group block">
-          <p class="font-mono text-xs text-[var(--color-accent)]">02</p>
+          <p class="font-mono text-xs text-[var(--color-accent)]">02 · Adopt</p>
           <h3 class="mt-2 font-medium text-[var(--color-ink)] group-hover:text-[var(--color-accent)]">Adoption &amp; support</h3>
           <p class="mt-2 text-sm leading-relaxed text-[var(--color-muted)]">
-            We help take a tool from proof-of-concept to production, then stay on so a broken upgrade doesn't become your problem alone.
+            We help take a tool from proof-of-concept to production — AI-assisted where it speeds things up — then stay on so a broken upgrade doesn't become your problem alone.
           </p>
         </a>
         <a href="#open-source" class="group block">
-          <p class="font-mono text-xs text-[var(--color-accent)]">03</p>
+          <p class="font-mono text-xs text-[var(--color-accent)]">03 · Own</p>
           <h3 class="mt-2 font-medium text-[var(--color-ink)] group-hover:text-[var(--color-accent)]">Open-source tooling</h3>
           <p class="mt-2 text-sm leading-relaxed text-[var(--color-muted)]">
-            Cloud-native, OIDC-native identity tooling for Kubernetes — open source from the first commit, no asterisk.
+            Open tooling for identity, security, and sovereignty — for people, workloads, and AI agents alike — open source from the first commit, no asterisk.
           </p>
         </a>
+      </div>
+    </section>
+
+    <!-- Standards & protocols -->
+    <section id="standards" class="border-t border-[var(--color-border)]">
+      <div class="mx-auto max-w-5xl px-6 py-20">
+        <h2 class="font-mono text-sm font-medium uppercase tracking-wider text-[var(--color-accent)]">Standards &amp; protocols</h2>
+        <p class="mt-3 max-w-xl font-heading text-3xl font-bold tracking-tight text-[var(--color-ink)]">
+          We speak the standards, not a proprietary dialect.
+        </p>
+        <p class="mt-3 max-w-2xl text-sm leading-relaxed text-[var(--color-muted)]">
+          Interoperable by default. We build on the open, international protocols your
+          stack — and your regulator — already expect, so nothing here locks you in.
+        </p>
+
+        <dl class="mt-10 space-y-8">
+          {[
+            {
+              group: 'Identity &amp; access',
+              items: ['OpenID Connect', 'OAuth 2.1', 'SAML 2.0', 'SCIM', 'FIDO2 / WebAuthn', 'Passkeys', 'JOSE (JWT/JWS/JWE)'],
+            },
+            {
+              group: 'Wallets &amp; verifiable credentials',
+              items: ['EUDI Wallet (ARF)', 'W3C Verifiable Credentials', 'Decentralized Identifiers (DIDs)', 'OpenID4VC / OpenID4VP', 'SD-JWT VC', 'ISO/IEC 18013-5 (mDL)'],
+            },
+            {
+              group: 'Signatures &amp; trust services',
+              items: ['eIDAS 2.0', 'Qualified Signatures (QES)', 'PAdES / XAdES / CAdES', 'X.509 &amp; PKI', 'Cloud Signature Consortium'],
+            },
+            {
+              group: 'Cloud-native security',
+              items: ['SPIFFE / SPIRE', 'Mutual TLS', 'Zero Trust (NIST 800-207)', 'OPA / Rego', 'OpenTelemetry'],
+            },
+            {
+              group: 'Compliance &amp; sovereignty',
+              items: ['GDPR', 'NIS2', 'ISO/IEC 27001', 'SOC 2', 'Gaia-X'],
+            },
+          ].map((row) => (
+            <div class="grid gap-3 border-t border-[var(--color-border)] pt-6 sm:grid-cols-[13rem_1fr] sm:gap-8">
+              <dt class="font-mono text-xs uppercase tracking-wider text-[var(--color-muted)]" set:html={row.group}></dt>
+              <dd class="flex flex-wrap gap-2">
+                {row.items.map((item) => (
+                  <span
+                    class="inline-flex items-center rounded-full border border-[var(--color-border)] bg-[var(--color-surface)] px-3 py-1.5 font-mono text-xs text-[var(--color-muted)] transition-colors hover:border-[var(--color-accent-dim)] hover:text-[var(--color-ink)]"
+                    set:html={item}
+                  ></span>
+                ))}
+              </dd>
+            </div>
+          ))}
+        </dl>
       </div>
     </section>
 
@@ -101,8 +166,8 @@ const posts = (await getCollection('blog', ({ data }) => !data.draft))
             </p>
             <p class="mt-4 text-sm leading-relaxed text-[var(--color-muted)]">
               We run practical workshops for engineering and platform teams —
-              OIDC fundamentals, zero trust patterns, and Kubernetes hardening —
-              scoped to your actual stack. Remote or on-site.
+              digital identity, zero trust, sovereignty, and AI-driven threat
+              detection — scoped to your actual context. Remote or on-site.
             </p>
             <div class="mt-6 flex flex-wrap gap-3">
               <a
@@ -154,7 +219,9 @@ const posts = (await getCollection('blog', ({ data }) => !data.draft))
               We're a new studio and don't have a public tool out yet — but every
               project we ship will be open source from its first commit, so you can
               audit it, run it yourself, and contribute back instead of taking it on
-              faith.
+              faith. The same goes for AI: we favour models you can run on your own
+              infrastructure, so identity and personal data stay sovereign — under
+              your control, not a vendor's.
             </p>
           </div>
           <div class="rounded-xl border border-[#212b38] bg-[#0a0e14] p-6 font-mono text-sm shadow-lg">
